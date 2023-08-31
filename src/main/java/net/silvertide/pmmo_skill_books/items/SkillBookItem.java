@@ -29,7 +29,7 @@ public abstract class SkillBookItem extends Item {
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         ItemStack itemstack = pPlayer.getItemInHand(pUsedHand);
         UseSkillBookResult useResult = playerCanUseSkillBook(pPlayer);
-        boolean hasEnoughXP = this.xpLevelsConsumed == 0 || pPlayer.experienceLevel >= this.xpLevelsConsumed;
+        boolean hasEnoughXP = pPlayer.getAbilities().instabuild || this.xpLevelsConsumed == 0 || pPlayer.experienceLevel >= this.xpLevelsConsumed;
         if(useResult.isSuccessful() && hasEnoughXP){
             pPlayer.startUsingItem(pUsedHand);
             return InteractionResultHolder.success(itemstack);
