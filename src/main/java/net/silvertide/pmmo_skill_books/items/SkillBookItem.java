@@ -9,6 +9,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import net.silvertide.pmmo_skill_books.util.UseSkillBookResult;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -21,20 +22,25 @@ public abstract class SkillBookItem extends Item {
 
     protected SkillBookItem(Properties properties) {
         super(new Item.Properties().stacksTo(1).fireResistant().rarity(properties.rarity));
-        this.xpLevelsConsumed = properties.experienceRequired;
+        this.xpLevelsConsumed = properties.xpLevelsRequired;
         this.description = properties.description;
     }
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         ItemStack itemstack = pPlayer.getItemInHand(pUsedHand);
-        if(playerCanUseSkillBook(pPlayer)){
+        UseSkillBookResult useResult = playerCanUseSkillBook(pPlayer);
+        boolean hasEnoughXP = this.xpLevelsConsumed == 0 || pPlayer.experienceLevel >= this.xpLevelsConsumed;
+        if(useResult.isSuccessful() && hasEnoughXP){
             pPlayer.startUsingItem(pUsedHand);
-            return InteractionResultHolder.consume(itemstack);
+            return InteractionResultHolder.success(itemstack);
         } else {
             if(pLevel.isClientSide) {
-                pPlayer.sendSystemMessage(Component.literal(getRequirementDescription()));
+                if(!hasEnoughXP){
+                    pPlayer.sendSystemMessage(Component.literal("Requires " + this.xpLevelsConsumed + " experience levels to use."));
+                }
+                pPlayer.sendSystemMessage(Component.literal(useResult.getMessage()));
             }
-            return InteractionResultHolder.fail(itemstack);
+            return InteractionResultHolder.consume(itemstack);
         }
     }
 
@@ -47,7 +53,12 @@ public abstract class SkillBookItem extends Item {
                 pStack.shrink(1);
             }
             useSkillBook(player);
-            if(this.xpLevelsConsumed > 0) player.giveExperienceLevels(-this.xpLevelsConsumed);
+            if(this.xpLevelsConsumed > 0) {
+                if(clientSide) {
+                    player.sendSystemMessage(Component.literal("Ate your xp lol."));
+                }
+                player.giveExperienceLevels(-this.xpLevelsConsumed);
+            }
 
             if(clientSide) player.sendSystemMessage(Component.literal(getEffectDescription()));
         }
@@ -65,9 +76,7 @@ public abstract class SkillBookItem extends Item {
         return pStack;
     }
 
-    private boolean playerCanUseSkillBook(Player player) {
-        return player.experienceLevel >= xpLevelsConsumed;
-    }
+    protected abstract UseSkillBookResult playerCanUseSkillBook(Player player);
 
     private String getRequirementDescription() {
         return "Requires " + this.xpLevelsConsumed + " levels to use.";
@@ -109,12 +118,12 @@ public abstract class SkillBookItem extends Item {
     }
 
     public static class Properties {
-        int experienceRequired = 0;
+        int xpLevelsRequired = 0;
         String description;
         Rarity rarity = Rarity.RARE;
 
-        public Properties experienceRequired(int experienceRequired){
-            this.experienceRequired = experienceRequired;
+        public Properties xpLevelsRequired(int xpLevelsRequired){
+            this.xpLevelsRequired = xpLevelsRequired;
             return this;
         }
 

@@ -1,35 +1,38 @@
 package net.silvertide.pmmo_skill_books.items.custom;
 
-import harmonised.pmmo.api.APIUtils;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.world.entity.player.Player;
 import net.silvertide.pmmo_skill_books.util.UseSkillBookResult;
 import net.silvertide.pmmo_skill_books.items.SkillBookItem;
 
-public class AddXPSkillBookItem extends SkillBookItem {
-    protected String skill;
-    private long xpToAdd;
-    public AddXPSkillBookItem(Properties properties, String skill, long xpToAdd){
+public class CommandSkillBookItem extends SkillBookItem {
+    protected String command;
+    protected String effectDescription;
+    public CommandSkillBookItem(Properties properties, String command, String effectDescription){
         super(properties);
-        this.skill = skill;
-        this.xpToAdd = xpToAdd;
+        this.effectDescription = effectDescription;
+        this.command = command;
     }
+
     @Override
     protected UseSkillBookResult playerCanUseSkillBook(Player player) {
         return new UseSkillBookResult(true, "");
     }
+
     @Override
     protected void useSkillBook(Player player) {
-        APIUtils.addXp(this.skill, player, this.xpToAdd);
+        CommandSourceStack cmdSrc = player.createCommandSourceStack();
+        player.getServer().getCommands().performPrefixedCommand(cmdSrc, command);
     }
 
     @Override
     protected String getEffectDescription() {
-        return "You have gained " + this.xpToAdd + " " + this.skill + " experience.";
+        return this.effectDescription;
     }
 
     @Override
     protected String getHoverTextDescription()  {
         if(this.description != null) return this.description;
-        return "+" + this.xpToAdd + " " + this.skill + " experience.";
+        return "Needs description.";
     }
 }

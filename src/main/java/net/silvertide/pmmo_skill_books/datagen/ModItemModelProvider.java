@@ -8,6 +8,8 @@ import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 import net.silvertide.pmmo_skill_books.PMMOSkillBooks;
+import net.silvertide.pmmo_skill_books.util.SkillBookColor;
+import net.silvertide.pmmo_skill_books.util.SkillBookTrim;
 import net.silvertide.pmmo_skill_books.items.ModItems;
 
 public class ModItemModelProvider extends ItemModelProvider {
@@ -17,9 +19,10 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        skillBookItem(ModItems.SKILL_BOOK);
-        skillBookItem(ModItems.SKILL_BOOK_2);
-        skillBookItem(ModItems.SKILL_BOOK_3);
+        skillBookItem(ModItems.SKILL_BOOK, SkillBookColor.BLUE);
+        skillBookItem(ModItems.SKILL_BOOK_2, SkillBookColor.BLACK);
+        skillBookItem(ModItems.SKILL_BOOK_3, SkillBookColor.GREEN);
+        skillBookItem(ModItems.SKILL_BOOK_4, SkillBookColor.PURPLE, SkillBookTrim.DIAMOND);
     }
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item) {
@@ -27,8 +30,15 @@ public class ModItemModelProvider extends ItemModelProvider {
             new ResourceLocation("item/generated")).texture("layer0", new ResourceLocation(PMMOSkillBooks.MOD_ID, "item/" + item.getId().getPath()));
     }
 
-    private ItemModelBuilder skillBookItem(RegistryObject<Item> item) {
+    private ItemModelBuilder skillBookItem(RegistryObject<Item> item, SkillBookColor color, SkillBookTrim trim) {
+        String texturePath = "skill_book_" + color;
+        if (trim != SkillBookTrim.PLAIN) {
+            texturePath = texturePath + "_" + trim;
+        }
         return withExistingParent(item.getId().getPath(),
-                new ResourceLocation("item/generated")).texture("layer0", new ResourceLocation(PMMOSkillBooks.MOD_ID, "item/skill_book"));
+                new ResourceLocation("item/generated")).texture("layer0", new ResourceLocation(PMMOSkillBooks.MOD_ID, "item/" + texturePath));
+    }
+    private ItemModelBuilder skillBookItem(RegistryObject<Item> item, SkillBookColor color) {
+        return skillBookItem(item, color, SkillBookTrim.PLAIN);
     }
 }

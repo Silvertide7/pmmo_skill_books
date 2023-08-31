@@ -10,8 +10,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 
-public class ModItemTagGenerator extends TagsProvider {
-    protected ModItemTagGenerator(PackOutput packOutput, ResourceKey resourceKey, CompletableFuture completableFuture, @Nullable ExistingFileHelper existingFileHelper) {
+public class ModItemTagProvider extends TagsProvider {
+    protected ModItemTagProvider(PackOutput packOutput, ResourceKey resourceKey, CompletableFuture completableFuture, @Nullable ExistingFileHelper existingFileHelper) {
         super(packOutput, resourceKey, completableFuture, PMMOSkillBooks.MOD_ID, existingFileHelper);
     }
 

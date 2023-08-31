@@ -21,6 +21,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.SKILL_BOOK.get());
                         output.accept(ModItems.SKILL_BOOK_2.get());
                         output.accept(ModItems.SKILL_BOOK_3.get());
+                        output.accept(ModItems.SKILL_BOOK_4.get());
                     }).build());
     public static void register(IEventBus eventBus) {
         CREATIVE_MODE_TABS.register(eventBus);

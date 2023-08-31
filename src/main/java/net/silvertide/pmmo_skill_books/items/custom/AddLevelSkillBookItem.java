@@ -2,16 +2,20 @@ package net.silvertide.pmmo_skill_books.items.custom;
 
 import harmonised.pmmo.api.APIUtils;
 import net.minecraft.world.entity.player.Player;
+import net.silvertide.pmmo_skill_books.util.UseSkillBookResult;
 import net.silvertide.pmmo_skill_books.items.SkillBookItem;
 
 public class AddLevelSkillBookItem extends SkillBookItem {
     protected String skill;
     protected int levelsToAdd;
-// Abstract numLevels and effect out to here
     public AddLevelSkillBookItem(Properties properties, String skill, int levelsToAdd){
         super(properties);
         this.skill = skill;
         this.levelsToAdd = levelsToAdd;
+    }
+    @Override
+    protected UseSkillBookResult playerCanUseSkillBook(Player player) {
+        return new UseSkillBookResult(true, "");
     }
     @Override
     protected void useSkillBook(Player player) {
@@ -21,7 +25,7 @@ public class AddLevelSkillBookItem extends SkillBookItem {
 
     @Override
     protected String getEffectDescription() {
-        return "You have gained " + this.levelsToAdd + " " + (this.levelsToAdd == 1 ? "level" : "levels") + "of " + this.skill + ".";
+        return "You have gained " + this.levelsToAdd + " " + (this.levelsToAdd == 1 ? "level" : "levels") + " of " + this.skill + ".";
     }
 
     @Override
