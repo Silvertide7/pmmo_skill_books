@@ -9,7 +9,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
-import net.silvertide.pmmo_skill_books.util.UseSkillBookResult;
+import net.silvertide.pmmo_skill_books.utils.UseSkillBookResult;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -110,7 +110,10 @@ public abstract class SkillBookItem extends Item {
     @Override
     public void appendHoverText(ItemStack pStack, @org.jetbrains.annotations.Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
         if(Screen.hasShiftDown()){
-            pTooltipComponents.add(Component.literal(getHoverTextDescription()));
+            pTooltipComponents.add(Component.literal("§3Effect: " + getHoverTextDescription() + "§r"));
+            if(this.xpLevelsConsumed > 0) {
+                pTooltipComponents.add(Component.literal("§aXP Cost: " + this.xpLevelsConsumed + " levels§r"));
+            }
         } else {
             pTooltipComponents.add(Component.translatable("tooltip.pmmo_skill_books.skill_book.tooltip.shift"));
         }

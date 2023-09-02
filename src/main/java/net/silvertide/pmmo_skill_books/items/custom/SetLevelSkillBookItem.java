@@ -2,7 +2,8 @@ package net.silvertide.pmmo_skill_books.items.custom;
 
 import harmonised.pmmo.api.APIUtils;
 import net.minecraft.world.entity.player.Player;
-import net.silvertide.pmmo_skill_books.util.UseSkillBookResult;
+import net.silvertide.pmmo_skill_books.utils.SkillBookUtil;
+import net.silvertide.pmmo_skill_books.utils.UseSkillBookResult;
 import net.silvertide.pmmo_skill_books.items.SkillBookItem;
 
 public class SetLevelSkillBookItem extends SkillBookItem {
@@ -32,11 +33,11 @@ public class SetLevelSkillBookItem extends SkillBookItem {
 
     @Override
     protected String getEffectDescription() {
-        return "Your " + this.skill + " skill is now level " + this.levelToSet;
+        return "Your " + SkillBookUtil.capitalize(this.skill) + " skill is now level " + this.levelToSet;
     }
     @Override
     protected String getHoverTextDescription()  {
         if(this.description != null) return this.description;
-        return this.skill + " level " + this.levelToSet;
+        return SkillBookUtil.capitalize(this.skill) + " - Level " + this.levelToSet;
     }
 }

@@ -1,4 +1,4 @@
-package net.silvertide.pmmo_skill_books.util;
+package net.silvertide.pmmo_skill_books.utils;
 
 public enum SkillBookTrim {
     PLAIN,

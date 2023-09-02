@@ -2,7 +2,7 @@ package net.silvertide.pmmo_skill_books.items.custom;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.world.entity.player.Player;
-import net.silvertide.pmmo_skill_books.util.UseSkillBookResult;
+import net.silvertide.pmmo_skill_books.utils.UseSkillBookResult;
 import net.silvertide.pmmo_skill_books.items.SkillBookItem;
 
 public class CommandSkillBookItem extends SkillBookItem {

@@ -1,5 +1,4 @@
-// 1.20.1	2023-08-30T19:59:15.598102	Item Models: pmmo_skill_books
-a40d79e5b3a49d80c643d325ae6cb21ae5e612fa assets/pmmo_skill_books/models/item/skill_book_add_level.json
-26654f918936882e7addd2b1197241aef16a8b3b assets/pmmo_skill_books/models/item/skill_book_add_xp.json
-3b0ba896f86f87045a35f80ccfa7d587b604de75 assets/pmmo_skill_books/models/item/skill_book_command.json
-db65291fc9a15aa645ab08c0aad0e11f997ba632 assets/pmmo_skill_books/models/item/skill_book_set_level.json
+// 1.20.1	2023-09-01T22:24:27.527971	Item Models: pmmo_skill_books
+91eb5533750502aff5e4aa432d8c22ef9c0f26e9 assets/pmmo_skill_books/models/item/rogue_level_1.json
+3b55bc77aa8ab05daa30837fd224210f41623b8c assets/pmmo_skill_books/models/item/rogue_level_2.json
+ed8b6a9eab28da48dd46a23502401eefb38c8d1e assets/pmmo_skill_books/models/item/rogue_level_3.json

@@ -8,8 +8,8 @@ import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 import net.silvertide.pmmo_skill_books.PMMOSkillBooks;
-import net.silvertide.pmmo_skill_books.util.SkillBookColor;
-import net.silvertide.pmmo_skill_books.util.SkillBookTrim;
+import net.silvertide.pmmo_skill_books.utils.SkillBookColor;
+import net.silvertide.pmmo_skill_books.utils.SkillBookTrim;
 import net.silvertide.pmmo_skill_books.items.ModItems;
 
 public class ModItemModelProvider extends ItemModelProvider {
@@ -19,15 +19,12 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        skillBookItem(ModItems.SKILL_BOOK, SkillBookColor.BLUE);
-        skillBookItem(ModItems.SKILL_BOOK_2, SkillBookColor.BLACK);
-        skillBookItem(ModItems.SKILL_BOOK_3, SkillBookColor.GREEN);
-        skillBookItem(ModItems.SKILL_BOOK_4, SkillBookColor.PURPLE, SkillBookTrim.DIAMOND);
-    }
+        // ---- CLASSES ----
 
-    private ItemModelBuilder simpleItem(RegistryObject<Item> item) {
-        return withExistingParent(item.getId().getPath(),
-            new ResourceLocation("item/generated")).texture("layer0", new ResourceLocation(PMMOSkillBooks.MOD_ID, "item/" + item.getId().getPath()));
+        // Rogue
+        skillBookItem(ModItems.ROGUE_LEVEL_1, SkillBookColor.PURPLE);
+        skillBookItem(ModItems.ROGUE_LEVEL_2, SkillBookColor.PURPLE, SkillBookTrim.GOLD);
+        skillBookItem(ModItems.ROGUE_LEVEL_3, SkillBookColor.PURPLE, SkillBookTrim.EMERALD);
     }
 
     private ItemModelBuilder skillBookItem(RegistryObject<Item> item, SkillBookColor color, SkillBookTrim trim) {
