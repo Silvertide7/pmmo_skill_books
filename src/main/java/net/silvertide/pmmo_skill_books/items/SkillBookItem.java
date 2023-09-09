@@ -68,8 +68,8 @@ public abstract class SkillBookItem extends Item {
 
 //            player.openMenu(getMenuProvider(pLevel, pPos));
 
-            for(int i = 0; i < 5; ++i) {
-                serverlevel.sendParticles(ParticleTypes.SONIC_BOOM, player.getX() + pLevel.random.nextDouble(), (double)(player.getY() + 1), (double)player.getZ() + pLevel.random.nextDouble(), 1, 0.0D, 0.0D, 0.0D, 1.0D);
+            for(int i = 0; i < 10; ++i) {
+                serverlevel.sendParticles(ParticleTypes.ENCHANT, player.getX() + pLevel.random.nextDouble(), (double)(player.getY() + 1), (double)player.getZ() + pLevel.random.nextDouble(), 1, 0.0D, 0.0D, 0.0D, 1.0D);
             }
         }
 
