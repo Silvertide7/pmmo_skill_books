@@ -32,6 +32,6 @@ public class AddLevelSkillBookItem extends SkillBookItem {
     @Override
     protected String getHoverTextDescription()  {
         if(this.description != null) return this.description;
-        return "+ " + this.levelsToAdd + " " + SkillBookUtil.capitalize(this.skill) + " Levels";
+        return "+" + this.levelsToAdd + " " + SkillBookUtil.capitalize(this.skill) + (this.levelsToAdd == 1 ? " Level" : " Levels");
     }
 }

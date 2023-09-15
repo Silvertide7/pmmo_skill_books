@@ -14,14 +14,18 @@ public class ModCreativeModeTabs {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, PMMOSkillBooks.MOD_ID);
 
     public static final RegistryObject<CreativeModeTab> SKILL_BOOK_TAB = CREATIVE_MODE_TABS.register("skill_book_tab",
-            () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModItems.ROGUE_LEVEL_2.get()))
+            () -> CreativeModeTab.builder().icon(ModCreativeModeTabs::getIcon)
                     .title(Component.translatable("creative_tab.skill_books"))
                     .displayItems((displayParameters, output) -> {
-                        output.accept(ModItems.ROGUE_LEVEL_1.get());
-                        output.accept(ModItems.ROGUE_LEVEL_2.get());
-                        output.accept(ModItems.ROGUE_LEVEL_3.get());
+                        ModItems.getModItems().getSkillBookItems().forEach((skillBook -> {
+                            output.accept(skillBook.registryObject().get());
+                        }));
                     }).build());
     public static void register(IEventBus eventBus) {
         CREATIVE_MODE_TABS.register(eventBus);
+    }
+
+    private static ItemStack getIcon(){
+        return new ItemStack(ModItems.getModItems().getSkillBookItems().get(3).registryObject().get());
     }
 }

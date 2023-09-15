@@ -38,7 +38,8 @@ public abstract class SkillBookItem extends Item {
                 if(!hasEnoughXP){
                     pPlayer.sendSystemMessage(Component.literal("Requires " + this.xpLevelsConsumed + " experience levels to use."));
                 }
-                pPlayer.sendSystemMessage(Component.literal(useResult.getMessage()));
+                if(!useResult.isSuccessful()) pPlayer.sendSystemMessage(Component.literal(useResult.getMessage()));
+
             }
             return InteractionResultHolder.consume(itemstack);
         }
@@ -46,33 +47,29 @@ public abstract class SkillBookItem extends Item {
 
     public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity pEntityLiving) {
         Player player = pEntityLiving instanceof Player ? (Player)pEntityLiving : null;
-        boolean clientSide = pLevel.isClientSide;
 
-        if (player != null) {
-            if (!player.getAbilities().instabuild) {
-                pStack.shrink(1);
-            }
-            useSkillBook(player);
+        if (player != null && !pLevel.isClientSide) {
+            boolean stillHasEnoughXP = true;
             if(this.xpLevelsConsumed > 0) {
-                if(clientSide) {
-                    player.sendSystemMessage(Component.literal("Ate your xp lol."));
+                if(player.experienceLevel >= this.xpLevelsConsumed) {
+                    player.giveExperienceLevels(-this.xpLevelsConsumed);
+                } else {
+                    player.sendSystemMessage(Component.literal("Requires " + this.xpLevelsConsumed + " experience levels to use."));
+                    stillHasEnoughXP = false;
                 }
-                player.giveExperienceLevels(-this.xpLevelsConsumed);
             }
-
-            if(clientSide) player.sendSystemMessage(Component.literal(getEffectDescription()));
-        }
-
-        if (!clientSide) {
-            ServerLevel serverlevel = (ServerLevel)pLevel;
-
-//            player.openMenu(getMenuProvider(pLevel, pPos));
-
-            for(int i = 0; i < 10; ++i) {
-                serverlevel.sendParticles(ParticleTypes.ENCHANT, player.getX() + pLevel.random.nextDouble(), (double)(player.getY() + 1), (double)player.getZ() + pLevel.random.nextDouble(), 1, 0.0D, 0.0D, 0.0D, 1.0D);
+            if(stillHasEnoughXP) {
+                if (!player.getAbilities().instabuild) {
+                    pStack.shrink(1);
+                }
+                useSkillBook(player);
+                player.sendSystemMessage(Component.literal(getEffectDescription()));
+                ServerLevel serverlevel = (ServerLevel)pLevel;
+                for(int i = 0; i < 20; ++i) {
+                    serverlevel.sendParticles(ParticleTypes.ENCHANT, player.getX() + pLevel.random.nextDouble(), (double)(player.getY() + 1), (double)player.getZ() + pLevel.random.nextDouble(), 1, 0.0D, 0.0D, 0.0D, 1.0D);
+                }
             }
         }
-
         return pStack;
     }
 
@@ -109,13 +106,9 @@ public abstract class SkillBookItem extends Item {
     }
     @Override
     public void appendHoverText(ItemStack pStack, @org.jetbrains.annotations.Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-        if(Screen.hasShiftDown()){
-            pTooltipComponents.add(Component.literal("§3Effect: " + getHoverTextDescription() + "§r"));
-            if(this.xpLevelsConsumed > 0) {
-                pTooltipComponents.add(Component.literal("§aXP Cost: " + this.xpLevelsConsumed + " levels§r"));
-            }
-        } else {
-            pTooltipComponents.add(Component.translatable("tooltip.pmmo_skill_books.skill_book.tooltip.shift"));
+        pTooltipComponents.add(Component.literal("§3Effect: " + getHoverTextDescription() + "§r"));
+        if(this.xpLevelsConsumed > 0) {
+            pTooltipComponents.add(Component.literal("§aXP Cost: " + this.xpLevelsConsumed + " levels§r"));
         }
         super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
     }
@@ -123,7 +116,7 @@ public abstract class SkillBookItem extends Item {
     public static class Properties {
         int xpLevelsRequired = 0;
         String description;
-        Rarity rarity = Rarity.RARE;
+        Rarity rarity = Rarity.COMMON;
 
         public Properties xpLevelsRequired(int xpLevelsRequired){
             this.xpLevelsRequired = xpLevelsRequired;
