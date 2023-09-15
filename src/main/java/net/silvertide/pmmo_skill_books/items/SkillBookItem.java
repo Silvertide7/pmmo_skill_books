@@ -28,21 +28,20 @@ public abstract class SkillBookItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         ItemStack itemstack = pPlayer.getItemInHand(pUsedHand);
-        UseSkillBookResult useResult = playerCanUseSkillBook(pPlayer);
-        boolean hasEnoughXP = pPlayer.getAbilities().instabuild || this.xpLevelsConsumed == 0 || pPlayer.experienceLevel >= this.xpLevelsConsumed;
-        if(useResult.isSuccessful() && hasEnoughXP){
-            pPlayer.startUsingItem(pUsedHand);
-            return InteractionResultHolder.success(itemstack);
-        } else {
-            if(pLevel.isClientSide) {
-                if(!hasEnoughXP){
+        if(!pLevel.isClientSide) {
+            UseSkillBookResult useResult = playerCanUseSkillBook(pPlayer);
+            boolean hasEnoughXP = pPlayer.getAbilities().instabuild || this.xpLevelsConsumed == 0 || pPlayer.experienceLevel >= this.xpLevelsConsumed;
+            if (useResult.isSuccessful() && hasEnoughXP) {
+                pPlayer.startUsingItem(pUsedHand);
+                return InteractionResultHolder.success(itemstack);
+            } else {
+                if (!hasEnoughXP) {
                     pPlayer.sendSystemMessage(Component.literal("Requires " + this.xpLevelsConsumed + " experience levels to use."));
                 }
-                if(!useResult.isSuccessful()) pPlayer.sendSystemMessage(Component.literal(useResult.getMessage()));
-
+                if (!useResult.isSuccessful()) pPlayer.sendSystemMessage(Component.literal(useResult.getMessage()));
             }
-            return InteractionResultHolder.consume(itemstack);
         }
+        return InteractionResultHolder.fail(itemstack);
     }
 
     public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity pEntityLiving) {
@@ -50,7 +49,7 @@ public abstract class SkillBookItem extends Item {
 
         if (player != null && !pLevel.isClientSide) {
             boolean stillHasEnoughXP = true;
-            if(this.xpLevelsConsumed > 0) {
+            if(!player.getAbilities().instabuild && this.xpLevelsConsumed > 0) {
                 if(player.experienceLevel >= this.xpLevelsConsumed) {
                     player.giveExperienceLevels(-this.xpLevelsConsumed);
                 } else {
@@ -59,11 +58,11 @@ public abstract class SkillBookItem extends Item {
                 }
             }
             if(stillHasEnoughXP) {
+                useSkillBook(player);
+                player.sendSystemMessage(Component.literal(getEffectDescription()));
                 if (!player.getAbilities().instabuild) {
                     pStack.shrink(1);
                 }
-                useSkillBook(player);
-                player.sendSystemMessage(Component.literal(getEffectDescription()));
                 ServerLevel serverlevel = (ServerLevel)pLevel;
                 for(int i = 0; i < 20; ++i) {
                     serverlevel.sendParticles(ParticleTypes.ENCHANT, player.getX() + pLevel.random.nextDouble(), (double)(player.getY() + 1), (double)player.getZ() + pLevel.random.nextDouble(), 1, 0.0D, 0.0D, 0.0D, 1.0D);

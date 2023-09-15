@@ -27,8 +27,7 @@ public class SetLevelSkillBookItem extends SkillBookItem {
 
     @Override
     protected void useSkillBook(Player player) {
-
-            APIUtils.setLevel(this.skill, player, this.levelToSet);
+        APIUtils.setLevel(this.skill, player, this.levelToSet);
     }
 
     @Override
