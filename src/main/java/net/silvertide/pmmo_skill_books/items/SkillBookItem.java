@@ -105,7 +105,7 @@ public abstract class SkillBookItem extends Item {
     }
     @Override
     public void appendHoverText(ItemStack pStack, @org.jetbrains.annotations.Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-        pTooltipComponents.add(Component.literal("§3Effect: " + getHoverTextDescription() + "§r"));
+        pTooltipComponents.add(Component.literal("§3" + getHoverTextDescription() + "§r"));
         if(this.xpLevelsConsumed > 0) {
             pTooltipComponents.add(Component.literal("§aXP Cost: " + this.xpLevelsConsumed + " levels§r"));
         }
