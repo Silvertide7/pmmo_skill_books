@@ -50,7 +50,13 @@ public class SkillBookUtil {
                 "sailing",
                 "hunter",
                 "archery",
-                "taming"
+                "taming",
+                "strength",
+                "dexterity",
+                "constitution",
+                "intelligence",
+                "wisdom",
+                "charisma"
         };
     }
 }
