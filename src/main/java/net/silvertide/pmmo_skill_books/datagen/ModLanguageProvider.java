@@ -16,13 +16,15 @@ public class ModLanguageProvider extends LanguageProvider {
     @Override
     protected void addTranslations() {
         ModItems.getModItems().getSkillBookItems().forEach(skillBook -> {
-            if(Arrays.stream(SkillBookUtil.getClassList()).anyMatch(str -> str.equals(skillBook.skill()))){
+            if(Arrays.stream(SkillBookUtil.getClassListAsStrings(true)).anyMatch(str -> str.equals(skillBook.skill()))){
                 addItem(() -> skillBook.registryObject().get(), "Class Book");
-            } else if(Arrays.stream(SkillBookUtil.getSkillList()).anyMatch(str -> str.equals(skillBook.skill()))){
+            } else if(Arrays.stream(SkillBookUtil.SKILLS).anyMatch(str -> str.equals(skillBook.skill()))){
                 addItem(() -> skillBook.registryObject().get(), "Skill Book");
             } else {
                 addItem(() -> skillBook.registryObject().get(), "Special Book");
             }
         });
+
+        add("creative_tab.skill_books", "PMMO Skill Books");
     }
 }

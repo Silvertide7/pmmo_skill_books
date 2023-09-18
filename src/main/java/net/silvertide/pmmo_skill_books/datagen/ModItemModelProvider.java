@@ -23,7 +23,6 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        // ---- SKILLS ----
         List<SkillBook> skillBookItems = ModItems.getModItems().getSkillBookItems();
         skillBookItems.forEach(skillBook -> {
             skillBookItem(skillBook.registryObject(), getSkillBookColor(skillBook.effect()), getSkillBookTrim(skillBook.effect()));
@@ -55,8 +54,5 @@ public class ModItemModelProvider extends ItemModelProvider {
         }
         return withExistingParent(item.getId().getPath(),
                 new ResourceLocation("item/generated")).texture("layer0", new ResourceLocation(PMMOSkillBooks.MOD_ID, "item/" + texturePath));
-    }
-    private ItemModelBuilder skillBookItem(RegistryObject<Item> item, SkillBookColor color) {
-        return skillBookItem(item, color, SkillBookTrim.PLAIN);
     }
 }

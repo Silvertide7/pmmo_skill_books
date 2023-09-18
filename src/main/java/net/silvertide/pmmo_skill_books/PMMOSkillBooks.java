@@ -3,6 +3,7 @@ package net.silvertide.pmmo_skill_books;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -13,6 +14,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.silvertide.pmmo_skill_books.blocks.ModBlocks;
+import net.silvertide.pmmo_skill_books.commands.CmdRoot;
 import net.silvertide.pmmo_skill_books.items.ModItems;
 import net.silvertide.pmmo_skill_books.tabs.ModCreativeModeTabs;
 import org.slf4j.Logger;
@@ -38,9 +40,6 @@ public class PMMOSkillBooks
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
-
-        // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
@@ -66,6 +65,14 @@ public class PMMOSkillBooks
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
+        }
+    }
+
+    @Mod.EventBusSubscriber(modid=PMMOSkillBooks.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
+    public static class CommonSetup {
+        @SubscribeEvent
+        public static void onCommandRegister(RegisterCommandsEvent event) {
+            CmdRoot.register(event.getDispatcher());
         }
     }
 }

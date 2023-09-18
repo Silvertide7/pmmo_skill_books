@@ -20,8 +20,7 @@ public class AddLevelSkillBookItem extends SkillBookItem {
     }
     @Override
     protected void useSkillBook(Player player) {
-        int currentLevel = APIUtils.getLevel(this.skill, player);
-        APIUtils.setLevel(this.skill, player, this.levelsToAdd + currentLevel);
+        APIUtils.addLevel(this.skill, player, this.levelsToAdd);
     }
 
     @Override

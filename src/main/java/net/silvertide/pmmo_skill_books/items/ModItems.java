@@ -11,6 +11,7 @@ import net.silvertide.pmmo_skill_books.items.custom.AddLevelSkillBookItem;
 import net.silvertide.pmmo_skill_books.items.custom.AddXPSkillBookItem;
 import net.silvertide.pmmo_skill_books.items.custom.CommandSkillBookItem;
 import net.silvertide.pmmo_skill_books.items.custom.SetLevelSkillBookItem;
+import net.silvertide.pmmo_skill_books.utils.PlayerClass;
 import net.silvertide.pmmo_skill_books.utils.SkillBook;
 import net.silvertide.pmmo_skill_books.utils.SkillBookEffect;
 import net.silvertide.pmmo_skill_books.utils.SkillBookUtil;
@@ -26,8 +27,8 @@ public class ModItems {
 
     private ModItems() {
         skillBookItems = new ArrayList<>();
-        registerSkills(ITEMS, SkillBookUtil.getSkillList(), skillBookItems);
-        registerClasses(ITEMS, SkillBookUtil.getClassList(), skillBookItems);
+        registerSkills(ITEMS, SkillBookUtil.SKILLS, skillBookItems);
+        registerClasses(ITEMS, SkillBookUtil.getClassListAsStrings(true), skillBookItems);
         registerCustomBooks(ITEMS, skillBookItems);
     }
 
