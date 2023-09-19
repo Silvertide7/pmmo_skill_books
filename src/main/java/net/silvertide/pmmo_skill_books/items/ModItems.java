@@ -11,7 +11,6 @@ import net.silvertide.pmmo_skill_books.items.custom.AddLevelSkillBookItem;
 import net.silvertide.pmmo_skill_books.items.custom.AddXPSkillBookItem;
 import net.silvertide.pmmo_skill_books.items.custom.CommandSkillBookItem;
 import net.silvertide.pmmo_skill_books.items.custom.SetLevelSkillBookItem;
-import net.silvertide.pmmo_skill_books.utils.PlayerClass;
 import net.silvertide.pmmo_skill_books.utils.SkillBook;
 import net.silvertide.pmmo_skill_books.utils.SkillBookEffect;
 import net.silvertide.pmmo_skill_books.utils.SkillBookUtil;

@@ -1,10 +1,7 @@
 package net.silvertide.pmmo_skill_books.items.custom;
 
 import harmonised.pmmo.api.APIUtils;
-import harmonised.pmmo.core.Core;
-import harmonised.pmmo.core.IDataStorage;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.fml.LogicalSide;
 import net.silvertide.pmmo_skill_books.utils.SkillBookUtil;
 import net.silvertide.pmmo_skill_books.utils.UseSkillBookResult;
 import net.silvertide.pmmo_skill_books.items.SkillBookItem;
