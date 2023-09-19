@@ -1,6 +1,5 @@
 package net.silvertide.pmmo_skill_books.items;
 
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;

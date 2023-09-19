@@ -11,7 +11,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.silvertide.pmmo_skill_books.blocks.ModBlocks;
 import net.silvertide.pmmo_skill_books.commands.CmdRoot;
 import net.silvertide.pmmo_skill_books.items.ModItems;
 import net.silvertide.pmmo_skill_books.tabs.ModCreativeModeTabs;
@@ -21,7 +20,7 @@ import org.slf4j.Logger;
 public class PMMOSkillBooks
 {
     public static final String MOD_ID = "pmmo_skill_books";
-    public static final Logger MOD_LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
     public PMMOSkillBooks()
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -30,8 +29,6 @@ public class PMMOSkillBooks
         modEventBus.addListener(this::commonSetup);
 
         ModCreativeModeTabs.register(modEventBus);
-        // Register the Deferred Register to the mod event bus so blocks get registered
-        ModBlocks.register(modEventBus);
         // Register the Deferred Register to the mod event bus so items get registered
         ModItems.register(modEventBus);
 
