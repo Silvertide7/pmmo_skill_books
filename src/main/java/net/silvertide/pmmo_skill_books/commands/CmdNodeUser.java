@@ -15,6 +15,7 @@ import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.fml.LogicalSide;
+import net.silvertide.pmmo_skill_books.utils.PlayerSubClassType;
 import net.silvertide.pmmo_skill_books.utils.SkillBookUtil;
 
 public class CmdNodeUser {
@@ -27,14 +28,32 @@ public class CmdNodeUser {
     public static int forgetClass(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         ServerPlayer player = ctx.getSource().getPlayer();
         String skillName = StringArgumentType.getString(ctx, SKILL_ARG);
-        IDataStorage data = Core.get(LogicalSide.SERVER).getData();
-//        String[] skillForgetList = new String[]{skillName, };
 
-        data.setPlayerSkillLevel(skillName, player.getUUID(), 0);
-        ;
-        String playerMessage = "You have lost the class " + skillName;
-        ctx.getSource().sendSuccess(() -> Component.literal(playerMessage), true);
+        if(player == null) return 0;
+
+        if(deleteSkill(player, skillName)){
+            for(PlayerSubClassType subClass : SkillBookUtil.getPlayerMap().get(skillName).getSubClasses()) {
+                deleteSkill(player, subClass.toString());
+            }
+            String playerMessage = "You have lost the class " + SkillBookUtil.capitalize(skillName) + " and any of it's subclasses.";
+            ctx.getSource().sendSuccess(() -> Component.literal(playerMessage), true);
+        } else {
+            String playerMessage = "You are not a " + SkillBookUtil.capitalize(skillName) + ".";
+            ctx.getSource().sendSuccess(() -> Component.literal(playerMessage), true);
+        }
+
 
         return 0;
     }
+
+    private static boolean deleteSkill(ServerPlayer player, String skill) {
+        IDataStorage data = Core.get(LogicalSide.SERVER).getData();
+        if (data.getPlayerSkillLevel(skill, player.getUUID()) > 0) {
+            data.setPlayerSkillLevel(skill, player.getUUID(), 0);
+            return true;
+        }
+        return false;
+    }
 }
+
+

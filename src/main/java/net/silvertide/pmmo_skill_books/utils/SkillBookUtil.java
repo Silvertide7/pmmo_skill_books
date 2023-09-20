@@ -6,6 +6,7 @@ import harmonised.pmmo.core.Core;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class SkillBookUtil {
@@ -84,6 +85,13 @@ public class SkillBookUtil {
         long currXP = APIUtils.getXp(skill, player);
         int resultingLevel = Core.get(player.level()).getData().getLevelFromXP(currXP + xpToAdd);
         return resultingLevel >= maxLevel;
+    }
 
+    public static HashMap<String, PlayerClass> getPlayerMap() {
+        HashMap<String, PlayerClass> classMap = new HashMap<>();
+        for (PlayerClass pClass : PLAYER_CLASSES) {
+            classMap.put(pClass.getType().toString(), pClass);
+        }
+        return classMap;
     }
 }
