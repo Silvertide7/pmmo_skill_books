@@ -8,7 +8,6 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.IDataStorage;
-import harmonised.pmmo.setup.datagen.LangProvider;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -32,7 +31,7 @@ public class CmdNodeUser {
         if(player == null) return 0;
 
         if(deleteSkill(player, skillName)){
-            for(PlayerSubClassType subClass : SkillBookUtil.getPlayerMap().get(skillName).getSubClasses()) {
+            for(PlayerSubClassType subClass : SkillBookUtil.getPlayerClassMap().get(skillName).getSubClasses()) {
                 deleteSkill(player, subClass.toString());
             }
             String playerMessage = "You have lost the class " + SkillBookUtil.capitalize(skillName) + " and any of it's subclasses.";

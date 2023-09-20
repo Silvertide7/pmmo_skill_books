@@ -87,7 +87,7 @@ public class SkillBookUtil {
         return resultingLevel >= maxLevel;
     }
 
-    public static HashMap<String, PlayerClass> getPlayerMap() {
+    public static HashMap<String, PlayerClass> getPlayerClassMap() {
         HashMap<String, PlayerClass> classMap = new HashMap<>();
         for (PlayerClass pClass : PLAYER_CLASSES) {
             classMap.put(pClass.getType().toString(), pClass);

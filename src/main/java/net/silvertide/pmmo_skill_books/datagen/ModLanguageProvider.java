@@ -17,7 +17,6 @@ public class ModLanguageProvider extends LanguageProvider {
 
     @Override
     protected void addTranslations() {
-        HashMap<String, PlayerClass> classMap = SkillBookUtil.getPlayerMap();
         ModItems.getModItems().getSkillBookItems().forEach(skillBook -> {
             if(Arrays.stream(SkillBookUtil.getClassListAsStrings(true)).anyMatch(str -> str.equals(skillBook.skill()))){
                 if(Arrays.stream(SkillBookUtil.getClassListAsStrings(false)).anyMatch(str -> str.equals(skillBook.skill()))) {
