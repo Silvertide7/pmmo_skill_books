@@ -1,5 +1,10 @@
 package net.silvertide.pmmo_skill_books.utils;
 
+import harmonised.pmmo.api.APIUtils;
+import harmonised.pmmo.config.Config;
+import harmonised.pmmo.core.Core;
+import net.minecraft.world.entity.player.Player;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,5 +77,13 @@ public class SkillBookUtil {
             }
         }
         return classStrings.toArray(String[]::new);
+    }
+
+    public static boolean willLevelToMax(String skill, Player player, long xpToAdd) {
+        int maxLevel = Config.MAX_LEVEL.get();
+        long currXP = APIUtils.getXp(skill, player);
+        int resultingLevel = Core.get(player.level()).getData().getLevelFromXP(currXP + xpToAdd);
+        return resultingLevel >= maxLevel;
+
     }
 }

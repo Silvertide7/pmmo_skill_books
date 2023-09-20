@@ -1,5 +1,6 @@
 package net.silvertide.pmmo_skill_books.items.custom;
 
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.api.APIUtils;
 import net.minecraft.world.entity.player.Player;
 import net.silvertide.pmmo_skill_books.utils.SkillBookUtil;
@@ -16,11 +17,18 @@ public class AddLevelSkillBookItem extends SkillBookItem {
     }
     @Override
     protected UseSkillBookResult playerCanUseSkillBook(Player player) {
+        if ( APIUtils.getLevel(this.skill, player) >= Config.MAX_LEVEL.get() ) return new UseSkillBookResult(false, SkillBookUtil.capitalize(this.skill) + " is at max level.");
         return new UseSkillBookResult(true, "");
     }
     @Override
     protected void useSkillBook(Player player) {
-        APIUtils.addLevel(this.skill, player, this.levelsToAdd);
+        int currentLevel = APIUtils.getLevel(this.skill, player);
+        int maxLevel = Config.MAX_LEVEL.get();
+        if((currentLevel + this.levelsToAdd) >= maxLevel) {
+            APIUtils.setLevel(this.skill, player, maxLevel);
+        } else {
+            APIUtils.addLevel(this.skill, player, this.levelsToAdd);
+        }
     }
 
     @Override
