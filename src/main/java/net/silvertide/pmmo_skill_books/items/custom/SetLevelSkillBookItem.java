@@ -19,10 +19,12 @@ public class SetLevelSkillBookItem extends SkillBookItem {
     @Override
     protected UseSkillBookResult playerCanUseSkillBook(Player player) {
         int currentLevel = APIUtils.getLevel(this.skill, player);
-        if(currentLevel >= this.levelToSet) {
+        if(currentLevel == this.levelToSet) {
+            return new UseSkillBookResult(false, "You are already level " + this.levelToSet + " " + SkillBookUtil.capitalize(this.skill) + ".");
+        } else if (currentLevel > this.levelToSet) {
             return new UseSkillBookResult(false, "Your current level of " + SkillBookUtil.capitalize(this.skill) + " is higher than skill book.");
         } else if(currentLevel == Config.MAX_LEVEL.get()) {
-            return new UseSkillBookResult(false, "You are already at max level of " + SkillBookUtil.capitalize(this.skill) + ".");
+            return new UseSkillBookResult(false, "You are at max level of " + SkillBookUtil.capitalize(this.skill) + ".");
         } else {
             return new UseSkillBookResult(true, "");
         }

@@ -1,6 +1,11 @@
 package net.silvertide.pmmo_skill_books;
 
 import com.mojang.logging.LogUtils;
+import harmonised.pmmo.api.APIUtils;
+import harmonised.pmmo.api.enums.ReqType;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -15,6 +20,8 @@ import net.silvertide.pmmo_skill_books.commands.CmdRoot;
 import net.silvertide.pmmo_skill_books.items.ModItems;
 import net.silvertide.pmmo_skill_books.tabs.ModCreativeModeTabs;
 import org.slf4j.Logger;
+
+import java.util.function.BiPredicate;
 
 @Mod(PMMOSkillBooks.MOD_ID)
 public class PMMOSkillBooks
@@ -38,12 +45,15 @@ public class PMMOSkillBooks
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
-//        if (Config.logDirtBlock)
-//            MOD_LOGGER.info("DIRT BLOCK >> {}", ForgeRegistries.BLOCKS.getKey(Blocks.DIRT));
-//
-//        MOD_LOGGER.info(Config.magicNumberIntroduction + Config.magicNumber);
-//
-//        Config.items.forEach((item) -> MOD_LOGGER.info("ITEM >> {}", item.toString()));
+        BiPredicate<Player, ItemStack> ROGUE_WEAPONS = (player, stack) -> {
+            int wizardLevel = APIUtils.getLevel("wizard", player);
+            int rogueLevel = APIUtils.getLevel("rogue", player);
+            return rogueLevel > wizardLevel;
+        };
+
+        APIUtils.registerActionPredicate(new ResourceLocation("minecraft:netherite_sword"), ReqType.WEAPON, ROGUE_WEAPONS);
+        APIUtils.registerActionPredicate(new ResourceLocation("minecraft:diamond_sword"), ReqType.WEAPON, ROGUE_WEAPONS);
+        APIUtils.registerActionPredicate(new ResourceLocation("mysticalagriculture:supremium_sword"), ReqType.WEAPON, ROGUE_WEAPONS);
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call

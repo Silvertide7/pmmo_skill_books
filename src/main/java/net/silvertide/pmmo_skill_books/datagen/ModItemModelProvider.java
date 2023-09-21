@@ -8,10 +8,7 @@ import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 import net.silvertide.pmmo_skill_books.PMMOSkillBooks;
-import net.silvertide.pmmo_skill_books.utils.SkillBook;
-import net.silvertide.pmmo_skill_books.utils.SkillBookColor;
-import net.silvertide.pmmo_skill_books.utils.SkillBookEffect;
-import net.silvertide.pmmo_skill_books.utils.SkillBookTrim;
+import net.silvertide.pmmo_skill_books.utils.*;
 import net.silvertide.pmmo_skill_books.items.ModItems;
 
 import java.util.List;
@@ -23,9 +20,16 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        List<SkillBook> skillBookItems = ModItems.getModItems().getSkillBookItems();
-        skillBookItems.forEach(skillBook -> {
+        ModItems.skillBookItems.forEach(skillBook -> {
             skillBookItem(skillBook.registryObject(), getSkillBookColor(skillBook.effect()), getSkillBookTrim(skillBook.effect()));
+        });
+
+        ModItems.customBookItems.forEach(customBook -> {
+            skillBookItem(customBook.registryObject(), getSkillBookColor(customBook.effect()), getSkillBookTrim(customBook.effect()));
+        });
+
+        ModItems.classBookItems.forEach(classBook -> {
+            skillBookItem(classBook.registryObject(), getSkillBookColor(classBook.effect()), getSkillBookTrim(classBook.effect()));
         });
     }
 

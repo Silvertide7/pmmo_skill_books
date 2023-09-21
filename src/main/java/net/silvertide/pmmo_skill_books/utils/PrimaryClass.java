@@ -1,6 +1,5 @@
 package net.silvertide.pmmo_skill_books.utils;
-
-public enum PlayerClassType {
+public enum PrimaryClass implements PlayerClass {
     ARTIFICER,
     BARBARIAN,
     BARD,
@@ -14,7 +13,6 @@ public enum PlayerClassType {
     SORCERER,
     WARLOCK,
     WIZARD;
-
     @Override
     public String toString() {
         return switch (this) {

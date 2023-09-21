@@ -5,7 +5,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public record SkillBook(String skill, SkillBookEffect effect, RegistryObject<Item> registryObject) {
     public String getKey() {
-        return buildKey(this.effect, this.skill);
+        return effect.toString() + "_" + skill;
     }
 
     public static String buildKey(SkillBookEffect effect, String skill) {

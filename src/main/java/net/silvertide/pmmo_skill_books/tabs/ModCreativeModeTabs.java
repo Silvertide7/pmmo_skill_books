@@ -17,8 +17,16 @@ public class ModCreativeModeTabs {
             () -> CreativeModeTab.builder().icon(ModCreativeModeTabs::getIcon)
                     .title(Component.translatable("creative_tab.skill_books"))
                     .displayItems((displayParameters, output) -> {
-                        ModItems.getModItems().getSkillBookItems().forEach((skillBook -> {
+                        ModItems.skillBookItems.forEach((skillBook -> {
                             output.accept(skillBook.registryObject().get());
+                        }));
+
+                        ModItems.classBookItems.forEach((classBook -> {
+                            output.accept(classBook.registryObject().get());
+                        }));
+
+                        ModItems.customBookItems.forEach((customBook -> {
+                            output.accept(customBook.registryObject().get());
                         }));
                     }).build());
     public static void register(IEventBus eventBus) {
@@ -26,6 +34,6 @@ public class ModCreativeModeTabs {
     }
 
     private static ItemStack getIcon(){
-        return new ItemStack(ModItems.getModItems().getSkillBookItems().get(3).registryObject().get());
+        return new ItemStack(ModItems.skillBookItems.get(3).registryObject().get());
     }
 }

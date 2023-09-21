@@ -11,47 +11,28 @@ import net.silvertide.pmmo_skill_books.items.custom.AddLevelSkillBookItem;
 import net.silvertide.pmmo_skill_books.items.custom.AddXPSkillBookItem;
 import net.silvertide.pmmo_skill_books.items.custom.CommandSkillBookItem;
 import net.silvertide.pmmo_skill_books.items.custom.SetLevelSkillBookItem;
-import net.silvertide.pmmo_skill_books.utils.SkillBook;
-import net.silvertide.pmmo_skill_books.utils.SkillBookEffect;
-import net.silvertide.pmmo_skill_books.utils.SkillBookUtil;
+import net.silvertide.pmmo_skill_books.utils.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class ModItems {
-    private static ModItems singleton = null;
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, PMMOSkillBooks.MOD_ID);
-    private List<SkillBook> skillBookItems;
+    public static final List<SkillBook> skillBookItems = new ArrayList<>();
+    public static final List<SkillBook> customBookItems = new ArrayList<>();
+    public static final List<ClassBook> classBookItems = new ArrayList<>();
 
-    private ModItems() {
-        skillBookItems = new ArrayList<>();
-        registerSkills(ITEMS, SkillBookUtil.SKILLS, skillBookItems);
-        registerClasses(ITEMS, SkillBookUtil.getClassListAsStrings(true), skillBookItems);
-        registerCustomBooks(ITEMS, skillBookItems);
-    }
-
-    public static ModItems getModItems(){
-        if(singleton == null) {
-            singleton = new ModItems();
-        }
-        return singleton;
-    }
-
-    public List<SkillBook> getSkillBookItems() {
-        return this.skillBookItems;
-    }
-
-private void registerCustomBooks(DeferredRegister<Item> ITEMS, List<SkillBook> skillBookItems) {
+    static {
+        // ---- COMMAND BOOKS ----
         String commandKey = "set_time_day";
         String command = "/time set day";
         RegistryObject<Item> SKILL_BOOK_COMMAND = ITEMS.register(SkillBook.buildKey(SkillBookEffect.COMMAND_1, commandKey),
-            () -> new CommandSkillBookItem(new SkillBookItem.Properties().description("Sets time to day."),command, "Let there be light!"));
-        skillBookItems.add(new SkillBook(commandKey, SkillBookEffect.COMMAND_1, SKILL_BOOK_COMMAND));
-    }
+                () -> new CommandSkillBookItem(new SkillBookItem.Properties().description("Sets time to day."),command, "Let there be light!"));
+        customBookItems.add(new SkillBook(commandKey, SkillBookEffect.COMMAND_1, SKILL_BOOK_COMMAND));
 
-    private void registerSkills(DeferredRegister<Item> ITEMS, String[] skillList, List<SkillBook> skillBookItems) {
-        for(String skill : skillList) {
+        // ---- SKILL BOOKS ----
+        for(String skill : SkillBookUtil.SKILLS) {
             // --- ADD XP SKILL BOOKS
             // Add a 5000xp skill book for each skill
             String add5000Key = SkillBook.buildKey(SkillBookEffect.ADD_XP_5000, skill);
@@ -101,40 +82,38 @@ private void registerCustomBooks(DeferredRegister<Item> ITEMS, List<SkillBook> s
                     () -> new AddLevelSkillBookItem(new SkillBookItem.Properties().xpLevelsRequired(0).rarity(Rarity.EPIC), skill, 10));
             skillBookItems.add(new SkillBook(skill, SkillBookEffect.ADD_LEVEL_10, SKILL_ADD_10_LEVEL));
         }
-    }
 
-    private void registerClasses(DeferredRegister<Item> ITEMS, String[] classList, List<SkillBook> skillBookItems) {
-        for(String playerClass : classList) {
+        // ---- CLASS BOOKS ----
+        for(PlayerClass playerClass : PrimaryClass.values()) {
             // --- Set Level Class Skill Books
             // Set Level 1
-            String setLevel1 = SkillBook.buildKey(SkillBookEffect.SET_LEVEL_1, playerClass);
+            String setLevel1 = ClassBook.buildKey(SkillBookEffect.SET_LEVEL_1, playerClass);
             RegistryObject<Item> CLASS_SET_LEVEL_1 = ITEMS.register(setLevel1,
-                    () -> new SetLevelSkillBookItem(new SkillBookItem.Properties().xpLevelsRequired(5), playerClass, 1));
-            skillBookItems.add(new SkillBook(playerClass, SkillBookEffect.SET_LEVEL_1, CLASS_SET_LEVEL_1));
+                    () -> new SetLevelSkillBookItem(new SkillBookItem.Properties().xpLevelsRequired(5), playerClass.toString(), 1));
+            classBookItems.add(new ClassBook(playerClass, SkillBookEffect.SET_LEVEL_1, CLASS_SET_LEVEL_1));
 
             // Set Level 2
-            String setLevel2 = SkillBook.buildKey(SkillBookEffect.SET_LEVEL_2, playerClass);
+            String setLevel2 = ClassBook.buildKey(SkillBookEffect.SET_LEVEL_2, playerClass);
             RegistryObject<Item> CLASS_SET_LEVEL_2 = ITEMS.register(setLevel2,
-                    () -> new SetLevelSkillBookItem(new SkillBookItem.Properties().xpLevelsRequired(10).rarity(Rarity.UNCOMMON), playerClass, 2));
-            skillBookItems.add(new SkillBook(playerClass, SkillBookEffect.SET_LEVEL_2, CLASS_SET_LEVEL_2));
+                    () -> new SetLevelSkillBookItem(new SkillBookItem.Properties().xpLevelsRequired(10).rarity(Rarity.UNCOMMON), playerClass.toString(), 2));
+            classBookItems.add(new ClassBook(playerClass, SkillBookEffect.SET_LEVEL_2, CLASS_SET_LEVEL_2));
 
             // Set Level 3
-            String setLevel3 = SkillBook.buildKey(SkillBookEffect.SET_LEVEL_3, playerClass);
+            String setLevel3 = ClassBook.buildKey(SkillBookEffect.SET_LEVEL_3, playerClass);
             RegistryObject<Item> CLASS_SET_LEVEL_3 = ITEMS.register(setLevel3,
-                    () -> new SetLevelSkillBookItem(new SkillBookItem.Properties().xpLevelsRequired(15).rarity(Rarity.RARE), playerClass, 3));
-            skillBookItems.add(new SkillBook(playerClass, SkillBookEffect.SET_LEVEL_3, CLASS_SET_LEVEL_3));
+                    () -> new SetLevelSkillBookItem(new SkillBookItem.Properties().xpLevelsRequired(15).rarity(Rarity.RARE), playerClass.toString(), 3));
+            classBookItems.add(new ClassBook(playerClass, SkillBookEffect.SET_LEVEL_3, CLASS_SET_LEVEL_3));
 
             // Set Level 4
-            String setLevel4 = SkillBook.buildKey(SkillBookEffect.SET_LEVEL_4, playerClass);
+            String setLevel4 = ClassBook.buildKey(SkillBookEffect.SET_LEVEL_4, playerClass);
             RegistryObject<Item> CLASS_SET_LEVEL_4 = ITEMS.register(setLevel4,
-                    () -> new SetLevelSkillBookItem(new SkillBookItem.Properties().xpLevelsRequired(20).rarity(Rarity.EPIC), playerClass, 4));
-            skillBookItems.add(new SkillBook(playerClass, SkillBookEffect.SET_LEVEL_4, CLASS_SET_LEVEL_4));
+                    () -> new SetLevelSkillBookItem(new SkillBookItem.Properties().xpLevelsRequired(20).rarity(Rarity.EPIC), playerClass.toString(), 4));
+            classBookItems.add(new ClassBook(playerClass, SkillBookEffect.SET_LEVEL_4, CLASS_SET_LEVEL_4));
         }
     }
 
     public static void register(IEventBus eventBus){
         // Trigger the ModItem constructor to run before ITEMS is registered.
-        ModItems modItems = ModItems.getModItems();
         ITEMS.register(eventBus);
     }
 
