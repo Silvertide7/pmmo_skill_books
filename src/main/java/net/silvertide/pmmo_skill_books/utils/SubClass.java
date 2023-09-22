@@ -5,13 +5,17 @@ import org.jetbrains.annotations.Nullable;
 public enum SubClass implements IPlayerClass {
     VALKYRIE,
     OATHLESS,
-    ASSASSIN;
+    ASSASSIN,
+    TRACKER,
+    REAPER;
     @Override
     public String toString() {
         return switch (this) {
             case VALKYRIE -> "valkyrie";
             case OATHLESS -> "oathless";
             case ASSASSIN -> "assassin";
+            case REAPER -> "reaper";
+            case TRACKER -> "tracker";
         };
     }
     @Nullable

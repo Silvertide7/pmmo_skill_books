@@ -2,7 +2,6 @@ package net.silvertide.pmmo_skill_books.utils;
 
 import harmonised.pmmo.api.APIUtils;
 import net.minecraft.world.entity.player.Player;
-import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -18,6 +17,8 @@ public class PlayerClassUtil {
         associatePrimaryAndSubClass(PrimaryClass.PALADIN, SubClass.VALKYRIE);
         associatePrimaryAndSubClass(PrimaryClass.PALADIN, SubClass.OATHLESS);
         associatePrimaryAndSubClass(PrimaryClass.ROGUE, SubClass.ASSASSIN);
+        associatePrimaryAndSubClass(PrimaryClass.RANGER, SubClass.TRACKER);
+        associatePrimaryAndSubClass(PrimaryClass.WARLOCK, SubClass.REAPER);
     }
     public static PrimaryClass getPrimaryClass(SubClass subClass) {
         return SUB_TO_PRIMARY_CLASS_MAP.get(subClass);

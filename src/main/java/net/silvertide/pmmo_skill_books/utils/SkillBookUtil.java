@@ -29,7 +29,8 @@ public class SkillBookUtil {
         "constitution",
         "intelligence",
         "wisdom",
-        "charisma"
+        "charisma",
+        "vision"
     };
 
     public static String capitalize(String input) {

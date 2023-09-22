@@ -4,6 +4,8 @@
   "pmmo.constitution": "Constitution",
   "pmmo.intelligence": "Intelligence",
   "pmmo.wisdom": "Wisdom",
+,
+  "pmmo.vision": "Vision",
 
   "pmmo.artificer": "Artificer",
   "pmmo.barbarian": "Barbarian",
@@ -21,5 +23,7 @@
 
   "pmmo.valkyrie": "Valkyrie",
   "pmmo.oathless": "Oathless",
-  "pmmo.assassin": "Assassin"
+  "pmmo.assassin": "Assassin",
+  "pmmo.tracker": "Tracker",
+  "pmmo.reaper": "Reaper"
 }

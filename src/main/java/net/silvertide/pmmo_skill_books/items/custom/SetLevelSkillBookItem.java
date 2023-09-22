@@ -5,7 +5,6 @@ import harmonised.pmmo.config.Config;
 import net.minecraft.world.entity.player.Player;
 import net.silvertide.pmmo_skill_books.utils.*;
 import net.silvertide.pmmo_skill_books.items.SkillBookItem;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -57,9 +56,6 @@ public class SetLevelSkillBookItem extends SkillBookItem {
                     return new UseSkillBookResult(false, "You already have a " + SkillBookUtil.capitalize(pClass.toString()) + " subclass - " + SkillBookUtil.capitalize(conflictingSubclass.toString()));
                 }
             }
-
-
-
             return new UseSkillBookResult(true, "");
         }
     }
