@@ -5,7 +5,6 @@ public enum SkillBookTrim {
     GOLD,
     EMERALD,
     DIAMOND;
-
     @Override
     public String toString() {
         return switch (this) {

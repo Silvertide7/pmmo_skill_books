@@ -11,8 +11,6 @@ import net.silvertide.pmmo_skill_books.PMMOSkillBooks;
 import net.silvertide.pmmo_skill_books.utils.*;
 import net.silvertide.pmmo_skill_books.items.ModItems;
 
-import java.util.List;
-
 public class ModItemModelProvider extends ItemModelProvider {
     public ModItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
         super(output, PMMOSkillBooks.MOD_ID, existingFileHelper);

@@ -1,5 +1,8 @@
 package net.silvertide.pmmo_skill_books.utils;
-public enum PrimaryClass implements PlayerClass {
+
+import org.jetbrains.annotations.Nullable;
+
+public enum PrimaryClass implements IPlayerClass {
     ARTIFICER,
     BARBARIAN,
     BARD,
@@ -30,6 +33,13 @@ public enum PrimaryClass implements PlayerClass {
             case WARLOCK -> "warlock";
             case WIZARD -> "wizard";
         };
+    }
+    @Nullable
+    public static PrimaryClass fromString(String className) {
+        for(PrimaryClass primaryClass : PrimaryClass.values()) {
+            if (className.equals(primaryClass.toString())) return primaryClass;
+        }
+        return null;
     }
 }
 

@@ -44,17 +44,7 @@ public class PMMOSkillBooks
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
-    {
-        BiPredicate<Player, ItemStack> ROGUE_WEAPONS = (player, stack) -> {
-            int wizardLevel = APIUtils.getLevel("wizard", player);
-            int rogueLevel = APIUtils.getLevel("rogue", player);
-            return rogueLevel > wizardLevel;
-        };
-
-        APIUtils.registerActionPredicate(new ResourceLocation("minecraft:netherite_sword"), ReqType.WEAPON, ROGUE_WEAPONS);
-        APIUtils.registerActionPredicate(new ResourceLocation("minecraft:diamond_sword"), ReqType.WEAPON, ROGUE_WEAPONS);
-        APIUtils.registerActionPredicate(new ResourceLocation("mysticalagriculture:supremium_sword"), ReqType.WEAPON, ROGUE_WEAPONS);
-    }
+    {}
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent

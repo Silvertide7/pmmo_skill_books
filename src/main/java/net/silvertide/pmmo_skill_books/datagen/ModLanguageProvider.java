@@ -23,8 +23,8 @@ public class ModLanguageProvider extends LanguageProvider {
         });
 
         ModItems.classBookItems.forEach(classBook -> {
-            String className = classBook.playerClass().toString();
-            String bookName = classBook.playerClass() instanceof PrimaryClass ? "Class Book - " : "Subclass Book - ";
+            String className = classBook.IPlayerClass().toString();
+            String bookName = classBook.IPlayerClass() instanceof PrimaryClass ? "Class Book - " : "Subclass Book - ";
             addItem(() -> classBook.registryObject().get(), bookName + SkillBookUtil.capitalize(className));
         });
 

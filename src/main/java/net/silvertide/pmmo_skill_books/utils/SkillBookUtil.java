@@ -1,10 +1,4 @@
 package net.silvertide.pmmo_skill_books.utils;
-
-import harmonised.pmmo.api.APIUtils;
-import harmonised.pmmo.config.Config;
-import harmonised.pmmo.core.Core;
-import net.minecraft.world.entity.player.Player;
-
 public class SkillBookUtil {
     public static final String[] SKILLS = new String[]{
         "magic",

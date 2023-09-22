@@ -63,7 +63,7 @@ public abstract class SkillBookItem extends Item {
                     pStack.shrink(1);
                 }
                 ServerLevel serverlevel = (ServerLevel)pLevel;
-                for(int i = 0; i < 20; ++i) {
+                for(int i = 0; i < 30; ++i) {
                     serverlevel.sendParticles(ParticleTypes.ENCHANT, player.getX() + pLevel.random.nextDouble(), (double)(player.getY() + 1), (double)player.getZ() + pLevel.random.nextDouble(), 1, 0.0D, 0.0D, 0.0D, 1.0D);
                 }
             }

@@ -4,10 +4,6 @@ import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.RegistryObject;
 
 public record SkillBook(String skill, SkillBookEffect effect, RegistryObject<Item> registryObject) {
-    public String getKey() {
-        return effect.toString() + "_" + skill;
-    }
-
     public static String buildKey(SkillBookEffect effect, String skill) {
         return effect.toString() + "_" + skill;
     }

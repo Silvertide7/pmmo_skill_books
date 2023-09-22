@@ -3,12 +3,8 @@ package net.silvertide.pmmo_skill_books.utils;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.RegistryObject;
 
-public record ClassBook(PlayerClass playerClass, SkillBookEffect effect, RegistryObject<Item> registryObject) {
-    public String getKey() {
-        return effect.toString() + "_" + playerClass.toString();
-    }
-
-    public static String buildKey(SkillBookEffect effect, PlayerClass playerClass) {
-        return effect.toString() + "_" + playerClass.toString();
+public record ClassBook(IPlayerClass IPlayerClass, SkillBookEffect effect, RegistryObject<Item> registryObject) {
+    public static String buildKey(SkillBookEffect effect, IPlayerClass IPlayerClass) {
+        return effect.toString() + "_" + IPlayerClass.toString();
     }
 }

@@ -84,31 +84,59 @@ public class ModItems {
         }
 
         // ---- CLASS BOOKS ----
-        for(PlayerClass playerClass : PrimaryClass.values()) {
+        for(IPlayerClass IPlayerClass : PrimaryClass.values()) {
             // --- Set Level Class Skill Books
             // Set Level 1
-            String setLevel1 = ClassBook.buildKey(SkillBookEffect.SET_LEVEL_1, playerClass);
+            String setLevel1 = ClassBook.buildKey(SkillBookEffect.SET_LEVEL_1, IPlayerClass);
             RegistryObject<Item> CLASS_SET_LEVEL_1 = ITEMS.register(setLevel1,
-                    () -> new SetLevelSkillBookItem(new SkillBookItem.Properties().xpLevelsRequired(5), playerClass.toString(), 1));
-            classBookItems.add(new ClassBook(playerClass, SkillBookEffect.SET_LEVEL_1, CLASS_SET_LEVEL_1));
+                    () -> new SetLevelSkillBookItem(new SkillBookItem.Properties().xpLevelsRequired(5), IPlayerClass.toString(), 1));
+            classBookItems.add(new ClassBook(IPlayerClass, SkillBookEffect.SET_LEVEL_1, CLASS_SET_LEVEL_1));
 
             // Set Level 2
-            String setLevel2 = ClassBook.buildKey(SkillBookEffect.SET_LEVEL_2, playerClass);
+            String setLevel2 = ClassBook.buildKey(SkillBookEffect.SET_LEVEL_2, IPlayerClass);
             RegistryObject<Item> CLASS_SET_LEVEL_2 = ITEMS.register(setLevel2,
-                    () -> new SetLevelSkillBookItem(new SkillBookItem.Properties().xpLevelsRequired(10).rarity(Rarity.UNCOMMON), playerClass.toString(), 2));
-            classBookItems.add(new ClassBook(playerClass, SkillBookEffect.SET_LEVEL_2, CLASS_SET_LEVEL_2));
+                    () -> new SetLevelSkillBookItem(new SkillBookItem.Properties().xpLevelsRequired(10).rarity(Rarity.UNCOMMON), IPlayerClass.toString(), 2));
+            classBookItems.add(new ClassBook(IPlayerClass, SkillBookEffect.SET_LEVEL_2, CLASS_SET_LEVEL_2));
 
             // Set Level 3
-            String setLevel3 = ClassBook.buildKey(SkillBookEffect.SET_LEVEL_3, playerClass);
+            String setLevel3 = ClassBook.buildKey(SkillBookEffect.SET_LEVEL_3, IPlayerClass);
             RegistryObject<Item> CLASS_SET_LEVEL_3 = ITEMS.register(setLevel3,
-                    () -> new SetLevelSkillBookItem(new SkillBookItem.Properties().xpLevelsRequired(15).rarity(Rarity.RARE), playerClass.toString(), 3));
-            classBookItems.add(new ClassBook(playerClass, SkillBookEffect.SET_LEVEL_3, CLASS_SET_LEVEL_3));
+                    () -> new SetLevelSkillBookItem(new SkillBookItem.Properties().xpLevelsRequired(15).rarity(Rarity.RARE), IPlayerClass.toString(), 3));
+            classBookItems.add(new ClassBook(IPlayerClass, SkillBookEffect.SET_LEVEL_3, CLASS_SET_LEVEL_3));
 
             // Set Level 4
-            String setLevel4 = ClassBook.buildKey(SkillBookEffect.SET_LEVEL_4, playerClass);
+            String setLevel4 = ClassBook.buildKey(SkillBookEffect.SET_LEVEL_4, IPlayerClass);
             RegistryObject<Item> CLASS_SET_LEVEL_4 = ITEMS.register(setLevel4,
-                    () -> new SetLevelSkillBookItem(new SkillBookItem.Properties().xpLevelsRequired(20).rarity(Rarity.EPIC), playerClass.toString(), 4));
-            classBookItems.add(new ClassBook(playerClass, SkillBookEffect.SET_LEVEL_4, CLASS_SET_LEVEL_4));
+                    () -> new SetLevelSkillBookItem(new SkillBookItem.Properties().xpLevelsRequired(20).rarity(Rarity.EPIC), IPlayerClass.toString(), 4));
+            classBookItems.add(new ClassBook(IPlayerClass, SkillBookEffect.SET_LEVEL_4, CLASS_SET_LEVEL_4));
+        }
+
+        // ---- SUBCLASS BOOKS ----
+        for(IPlayerClass IPlayerClass : SubClass.values()) {
+            // --- Set Level Class Skill Books
+            // Set Level 1
+            String setLevel1 = ClassBook.buildKey(SkillBookEffect.SET_LEVEL_1, IPlayerClass);
+            RegistryObject<Item> CLASS_SET_LEVEL_1 = ITEMS.register(setLevel1,
+                    () -> new SetLevelSkillBookItem(new SkillBookItem.Properties().xpLevelsRequired(5), IPlayerClass.toString(), 1));
+            classBookItems.add(new ClassBook(IPlayerClass, SkillBookEffect.SET_LEVEL_1, CLASS_SET_LEVEL_1));
+
+            // Set Level 2
+            String setLevel2 = ClassBook.buildKey(SkillBookEffect.SET_LEVEL_2, IPlayerClass);
+            RegistryObject<Item> CLASS_SET_LEVEL_2 = ITEMS.register(setLevel2,
+                    () -> new SetLevelSkillBookItem(new SkillBookItem.Properties().xpLevelsRequired(10).rarity(Rarity.UNCOMMON), IPlayerClass.toString(), 2));
+            classBookItems.add(new ClassBook(IPlayerClass, SkillBookEffect.SET_LEVEL_2, CLASS_SET_LEVEL_2));
+
+            // Set Level 3
+            String setLevel3 = ClassBook.buildKey(SkillBookEffect.SET_LEVEL_3, IPlayerClass);
+            RegistryObject<Item> CLASS_SET_LEVEL_3 = ITEMS.register(setLevel3,
+                    () -> new SetLevelSkillBookItem(new SkillBookItem.Properties().xpLevelsRequired(15).rarity(Rarity.RARE), IPlayerClass.toString(), 3));
+            classBookItems.add(new ClassBook(IPlayerClass, SkillBookEffect.SET_LEVEL_3, CLASS_SET_LEVEL_3));
+
+            // Set Level 4
+            String setLevel4 = ClassBook.buildKey(SkillBookEffect.SET_LEVEL_4, IPlayerClass);
+            RegistryObject<Item> CLASS_SET_LEVEL_4 = ITEMS.register(setLevel4,
+                    () -> new SetLevelSkillBookItem(new SkillBookItem.Properties().xpLevelsRequired(20).rarity(Rarity.EPIC), IPlayerClass.toString(), 4));
+            classBookItems.add(new ClassBook(IPlayerClass, SkillBookEffect.SET_LEVEL_4, CLASS_SET_LEVEL_4));
         }
     }
 
