@@ -19,7 +19,7 @@ public class ModLanguageProvider extends LanguageProvider {
         });
 
         ModItems.customBookItems.forEach(skillBook -> {
-            addItem(() -> skillBook.registryObject().get(), "Special Book");
+            addItem(() -> skillBook.registryObject().get(), "Secret Book");
         });
 
         ModItems.classBookItems.forEach(classBook -> {

@@ -30,14 +30,15 @@ public abstract class SkillBookItem extends Item {
         if(!pLevel.isClientSide) {
             UseSkillBookResult useResult = playerCanUseSkillBook(pPlayer);
             boolean hasEnoughXP = pPlayer.getAbilities().instabuild || this.xpLevelsConsumed == 0 || pPlayer.experienceLevel >= this.xpLevelsConsumed;
-            if (useResult.isSuccessful() && hasEnoughXP) {
+            if (pPlayer.getAbilities().instabuild || (useResult.isSuccessful() && hasEnoughXP)) {
                 pPlayer.startUsingItem(pUsedHand);
                 return InteractionResultHolder.success(itemstack);
             } else {
-                if (!hasEnoughXP) {
+                if (!useResult.isSuccessful()){
+                    pPlayer.sendSystemMessage(Component.literal(useResult.getMessage()));
+                } else if (!hasEnoughXP) {
                     pPlayer.sendSystemMessage(Component.literal("Requires " + this.xpLevelsConsumed + " experience levels to use."));
                 }
-                if (!useResult.isSuccessful()) pPlayer.sendSystemMessage(Component.literal(useResult.getMessage()));
             }
         }
         return InteractionResultHolder.fail(itemstack);
@@ -80,18 +81,6 @@ public abstract class SkillBookItem extends Item {
     protected abstract void useSkillBook(Player player);
     protected abstract String getEffectDescription();
     protected abstract String getHoverTextDescription();
-
-
-//    @Nullable
-//    public MenuProvider getMenuProvider(BlockState pState, Level pLevel, BlockPos pPos) {
-//        BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-//        if (blockentity instanceof EnchantmentTableBlockEntity) {
-//            Component component = ((Nameable) blockentity).getDisplayName();
-//            return new SimpleMenuProvider((p_207906_, p_207907_, p_207908_) -> new EnchantmentMenu(p_207906_, p_207907_, ContainerLevelAccess.create(pLevel, pPos)), component);
-//        } else {
-//            return null;
-//        }
-//    }
 
     @Override
     public int getUseDuration(ItemStack pStack) {

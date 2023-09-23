@@ -64,9 +64,12 @@ public class CmdNodeUser {
     private static void deletePrimaryClass(CommandContext<CommandSourceStack> ctx, PrimaryClass primaryClass, ServerPlayer player) {
         if(deleteClass(player, primaryClass)) {
             List<SubClass> subClasses = PlayerClassUtil.getSubClasses(primaryClass);
-            for(SubClass sClass : subClasses) {
-                deleteClass(player, sClass);
+            if(subClasses != null){
+                for(SubClass sClass : subClasses) {
+                    deleteClass(player, sClass);
+                }
             }
+
             String playerMessage = "You have lost the class " + SkillBookUtil.capitalize(primaryClass.toString()) + " and any of it's subclasses.";
             ctx.getSource().sendSuccess(() -> Component.literal(playerMessage), true);
         } else {

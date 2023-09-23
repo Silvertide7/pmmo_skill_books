@@ -1,11 +1,6 @@
 package net.silvertide.pmmo_skill_books;
 
 import com.mojang.logging.LogUtils;
-import harmonised.pmmo.api.APIUtils;
-import harmonised.pmmo.api.enums.ReqType;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -21,13 +16,12 @@ import net.silvertide.pmmo_skill_books.items.ModItems;
 import net.silvertide.pmmo_skill_books.tabs.ModCreativeModeTabs;
 import org.slf4j.Logger;
 
-import java.util.function.BiPredicate;
-
 @Mod(PMMOSkillBooks.MOD_ID)
 public class PMMOSkillBooks
 {
     public static final String MOD_ID = "pmmo_skill_books";
     public static final Logger LOGGER = LogUtils.getLogger();
+
     public PMMOSkillBooks()
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
