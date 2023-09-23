@@ -14,8 +14,8 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public abstract class SkillBookItem extends Item {
-    private static final int USE_DURATION = 32;
-    private int xpLevelsConsumed;
+    private static final int USE_DURATION = 80;
+    private final int xpLevelsConsumed;
     @Nullable
     protected String description;
 
@@ -44,6 +44,7 @@ public abstract class SkillBookItem extends Item {
         return InteractionResultHolder.fail(itemstack);
     }
 
+    @Override
     public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity pEntityLiving) {
         Player player = pEntityLiving instanceof Player ? (Player)pEntityLiving : null;
 

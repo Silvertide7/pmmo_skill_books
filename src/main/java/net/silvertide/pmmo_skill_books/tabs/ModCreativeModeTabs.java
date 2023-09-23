@@ -34,6 +34,6 @@ public class ModCreativeModeTabs {
     }
 
     private static ItemStack getIcon(){
-        return new ItemStack(ModItems.skillBookItems.get(3).registryObject().get());
+        return new ItemStack(ModItems.classBookItems.get(ModItems.classBookItems.size()-1).registryObject().get());
     }
 }
