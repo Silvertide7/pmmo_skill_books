@@ -92,6 +92,7 @@ public abstract class SkillBookItem extends Item {
     public UseAnim getUseAnimation(ItemStack pStack) {
         return UseAnim.BOW;
     }
+
     @Override
     public void appendHoverText(ItemStack pStack, @org.jetbrains.annotations.Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
         pTooltipComponents.add(Component.literal("§3" + getHoverTextDescription() + "§r"));

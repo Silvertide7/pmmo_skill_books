@@ -21,6 +21,7 @@ public class AddXPSkillBookItem extends SkillBookItem {
         if ( APIUtils.getLevel(this.skill, player) == Config.MAX_LEVEL.get() ) return new UseSkillBookResult(false, SkillBookUtil.capitalize(this.skill) + " is at max level.");
         return new UseSkillBookResult(true, "");
     }
+
     @Override
     protected void useSkillBook(Player player) {
         if(willLevelToMax(this.skill, player, this.xpToAdd)){

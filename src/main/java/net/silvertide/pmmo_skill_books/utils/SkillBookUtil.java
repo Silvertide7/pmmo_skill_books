@@ -29,11 +29,22 @@ public class SkillBookUtil {
         "constitution",
         "intelligence",
         "wisdom",
-        "charisma"
-    };
-
-    public static final String[] CLASS_SKILLS = new String[]{
-            "vision"
+        "charisma",
+        "defense",
+        "warding",
+        "melee",
+        "marksmanship",
+        "husbandry",
+        "arcana",
+        "acrobatics",
+        "fire_magic",
+        "ice_magic",
+        "ender_magic",
+        "evocation_magic",
+        "lightning_magic",
+        "blood_magic",
+        "holy_magic",
+        "nature_magic"
     };
 
     public static String capitalize(String input) {

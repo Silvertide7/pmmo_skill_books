@@ -3,27 +3,5 @@
   "pmmo.dexterity": "Dexterity",
   "pmmo.constitution": "Constitution",
   "pmmo.intelligence": "Intelligence",
-  "pmmo.wisdom": "Wisdom",
-
-  "pmmo.vision": "Vision",
-
-  "pmmo.artificer": "Artificer",
-  "pmmo.barbarian": "Barbarian",
-  "pmmo.bard": "Bard",
-  "pmmo.cleric": "Cleric",
-  "pmmo.druid": "Druid",
-  "pmmo.fighter": "Fighter",
-  "pmmo.monk": "Monk",
-  "pmmo.paladin": "Paladin",
-  "pmmo.ranger": "Ranger",
-  "pmmo.rogue": "Rogue",
-  "pmmo.sorcerer": "Sorcerer",
-  "pmmo.warlock": "Warlock",
-  "pmmo.wizard": "Wizard",
-
-  "pmmo.valkyrie": "Valkyrie",
-  "pmmo.oathless": "Oathless",
-  "pmmo.assassin": "Assassin",
-  "pmmo.tracker": "Tracker",
-  "pmmo.reaper": "Reaper"
+  "pmmo.wisdom": "Wisdom"
 }
