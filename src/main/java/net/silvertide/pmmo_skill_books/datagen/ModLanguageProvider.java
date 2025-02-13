@@ -12,9 +12,9 @@ public class ModLanguageProvider extends LanguageProvider {
 
     @Override
     protected void addTranslations() {
-        ModItems.skillBookItems.forEach(skillBook -> {
-            addItem(() -> skillBook.registryObject().get(), "Skill Book - " + SkillBookUtil.capitalize(skillBook.skill()));
-        });
+//        ModItems.skillBookItems.forEach(skillBook -> {
+//            addItem(() -> skillBook.registryObject().get(), "Skill Book - " + SkillBookUtil.capitalize(skillBook.skill()));
+//        });
 
         add("creative_tab.skill_books", "PMMO Skill Books");
     }

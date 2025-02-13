@@ -19,14 +19,14 @@ public class TabRegistry {
                     .icon(TabRegistry::getIcon)
                     .title(Component.translatable("creative_tab.skill_books"))
                     .displayItems((displayParameters, output) -> {
-                        ModItems.skillBookItems.forEach((skillBook -> {
-                            output.accept(skillBook.registryObject().get());
-                        }));
+//                        ItemRegistry.skillBookItems.forEach((skillBook -> {
+//                            output.accept(skillBook.registryObject().get());
+//                        }));
                     })
                     .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
                     .build());
 
     private static ItemStack getIcon(){
-        return new ItemStack(ModItems.skillBookItems.getLast().registryObject().get());
+        return new ItemStack(ItemRegistry.SKILL_BOOK.get());
     }
 }

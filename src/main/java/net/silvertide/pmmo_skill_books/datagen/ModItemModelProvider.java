@@ -8,6 +8,7 @@ import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.silvertide.pmmo_skill_books.PMMOSkillBooks;
+import net.silvertide.pmmo_skill_books.registry.ItemRegistry;
 import net.silvertide.pmmo_skill_books.utils.*;
 
 public class ModItemModelProvider extends ItemModelProvider {
@@ -17,9 +18,9 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        ModItems.skillBookItems.forEach(skillBook -> {
-            skillBookItem(skillBook.registryObject(), getSkillBookColor(skillBook.effect()), getSkillBookTrim(skillBook.effect()));
-        });
+//        ItemRegistry.skillBookItems.forEach(skillBook -> {
+//            skillBookItem(skillBook.registryObject(), getSkillBookColor(skillBook.effect()), getSkillBookTrim(skillBook.effect()));
+//        });
 
     }
 
