@@ -9,7 +9,6 @@ import java.util.Optional;
 public final class DataComponentUtil {
     private DataComponentUtil() {}
 
-    // ACCESS METHODS
     public static Optional<SkillBookData> getSkillBookData(ItemStack stack) {
         return Optional.ofNullable(stack.get(DataComponentRegistry.SKILL_BOOK_DATA));
     }

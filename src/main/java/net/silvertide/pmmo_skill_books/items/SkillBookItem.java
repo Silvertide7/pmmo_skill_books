@@ -11,6 +11,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import net.silvertide.pmmo_skill_books.data.ApplicationType;
+import net.silvertide.pmmo_skill_books.data.UseSkillBookResult;
 import net.silvertide.pmmo_skill_books.utils.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,11 +30,11 @@ public class SkillBookItem extends Item {
         ItemStack stack = player.getItemInHand(usedHand);
         if(player instanceof ServerPlayer serverPlayer) {
             UseSkillBookResult useResult = SkillBookUtil.canPlayerUseSkillBook(serverPlayer, stack);
-            if (useResult.isSuccessful()) {
+            if (useResult.success()) {
                 serverPlayer.startUsingItem(usedHand);
                 return InteractionResultHolder.success(stack);
             } else {
-                serverPlayer.sendSystemMessage(Component.literal(useResult.getMessage()));
+                serverPlayer.sendSystemMessage(Component.translatable(useResult.message()));
             }
         }
         return InteractionResultHolder.fail(stack);
@@ -69,13 +71,13 @@ public class SkillBookItem extends Item {
                         } else {
                             APIUtils.addLevel(skillBookData.skill(), serverPlayer, Math.toIntExact(skillBookData.applicationValue()));
                         }
-                        PlayerMessenger.displayClientMessage(serverPlayer, SkillBookUtil.getSkillBookEffectDescription(skillBookData));
+                        PlayerMessenger.displayTranslatabelClientMessage(serverPlayer, Component.translatable(SkillBookUtil.getSkillBookEffectTranslationKey(skillBookData), skillBookData.applicationValue(), SkillBookUtil.capitalize(skillBookData.skill())));
                     }
                     case ApplicationType.XP -> APIUtils.addXp(skillBookData.skill(), serverPlayer, valueToAdd);
                 }
 
             } catch(IllegalArgumentException | ArithmeticException ignored) {
-                serverPlayer.sendSystemMessage(Component.literal("Something went wrong."));
+                serverPlayer.sendSystemMessage(Component.translatable("pmmo_skill_books.message.use_book_error"));
             }
         });
     }
@@ -93,14 +95,19 @@ public class SkillBookItem extends Item {
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         DataComponentUtil.getSkillBookData(stack).ifPresent(skillBookData -> {
-            tooltipComponents.add(Component.literal("§3" + SkillBookUtil.getSkillBookEffectDescription(skillBookData) + "§r"));
+            tooltipComponents.add(Component.translatable(SkillBookUtil.getSkillBookEffectTranslationKey(skillBookData), skillBookData.applicationValue(), SkillBookUtil.capitalize(skillBookData.skill())));
         });
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
     }
 
-    // TODO: Implement
-//    @Override
-//    public String getDescriptionId(ItemStack stack) {
-//        return stack.has(DataComponents.LODESTONE_TRACKER) ? "item.minecraft.lodestone_compass" : super.getDescriptionId(stack);
-//    }
+    @Override
+    public String getDescriptionId(ItemStack stack) {
+        return DataComponentUtil.getSkillBookData(stack).map(skillBookData -> switch(skillBookData.getTrim()) {
+            case PLAIN -> super.getDescriptionId(stack);
+            case GOLD -> "item.pmmo_skill_books.gold_skill_book";
+            case EMERALD -> "item.pmmo_skill_books.emerald_skill_book";
+            case DIAMOND -> "item.pmmo_skill_books.diamond_skill_book";
+            case null -> super.getDescriptionId(stack);
+        }).orElse(super.getDescriptionId(stack));
+    }
 }

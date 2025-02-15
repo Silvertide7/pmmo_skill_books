@@ -2,5 +2,22 @@
   "parent": "minecraft:item/generated",
   "textures": {
     "layer0": "pmmo_skill_books:item/skill_book_blue"
-  }
+  },
+  "overrides": [
+    { "predicate": { "pmmo_skill_books:configuration": 2 }, "model": "pmmo_skill_books:item/skill_book_blue_gold" },
+    { "predicate": { "pmmo_skill_books:configuration": 3 }, "model": "pmmo_skill_books:item/skill_book_blue_emerald" },
+    { "predicate": { "pmmo_skill_books:configuration": 4 }, "model": "pmmo_skill_books:item/skill_book_blue_diamond" },
+    { "predicate": { "pmmo_skill_books:configuration": 11 }, "model": "pmmo_skill_books:item/skill_book_green" },
+    { "predicate": { "pmmo_skill_books:configuration": 12 }, "model": "pmmo_skill_books:item/skill_book_green_gold" },
+    { "predicate": { "pmmo_skill_books:configuration": 13 }, "model": "pmmo_skill_books:item/skill_book_green_emerald" },
+    { "predicate": { "pmmo_skill_books:configuration": 14 }, "model": "pmmo_skill_books:item/skill_book_green_diamond" },
+    { "predicate": { "pmmo_skill_books:configuration": 21 }, "model": "pmmo_skill_books:item/skill_book_purple" },
+    { "predicate": { "pmmo_skill_books:configuration": 22 }, "model": "pmmo_skill_books:item/skill_book_purple_gold" },
+    { "predicate": { "pmmo_skill_books:configuration": 23 }, "model": "pmmo_skill_books:item/skill_book_purple_emerald" },
+    { "predicate": { "pmmo_skill_books:configuration": 24 }, "model": "pmmo_skill_books:item/skill_book_purple_diamond" },
+    { "predicate": { "pmmo_skill_books:configuration": 31 }, "model": "pmmo_skill_books:item/skill_book_black" },
+    { "predicate": { "pmmo_skill_books:configuration": 32 }, "model": "pmmo_skill_books:item/skill_book_black_gold" },
+    { "predicate": { "pmmo_skill_books:configuration": 33 }, "model": "pmmo_skill_books:item/skill_book_black_emerald" },
+    { "predicate": { "pmmo_skill_books:configuration": 34 }, "model": "pmmo_skill_books:item/skill_book_black_diamond" }
+  ]
 }

@@ -4,7 +4,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.silvertide.pmmo_skill_books.utils.ApplicationType;
+import net.silvertide.pmmo_skill_books.data.ApplicationType;
+import net.silvertide.pmmo_skill_books.data.SkillBookColor;
+import net.silvertide.pmmo_skill_books.data.SkillBookTrim;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -18,8 +20,8 @@ public record SkillBookData(String skill, String applicationType, Long applicati
                 Codec.STRING.fieldOf("skill").forGetter(SkillBookData::skill),
                 Codec.STRING.fieldOf("application_type").forGetter(SkillBookData::applicationType),
                 Codec.LONG.fieldOf("application_value").forGetter(SkillBookData::applicationValue),
-                Codec.STRING.fieldOf("bookColor").forGetter(SkillBookData::bookColor),
-                Codec.STRING.fieldOf("trimColor").forGetter(SkillBookData::trimColor))
+                Codec.STRING.fieldOf("book_color").forGetter(SkillBookData::bookColor),
+                Codec.STRING.fieldOf("trim_color").forGetter(SkillBookData::trimColor))
             .apply(instance, SkillBookData::new));
 
         STREAM_CODEC = new StreamCodec<>() {
@@ -40,6 +42,22 @@ public record SkillBookData(String skill, String applicationType, Long applicati
 
     public ApplicationType getApplicationType() throws IllegalArgumentException {
         return ApplicationType.valueOf(applicationType().toUpperCase());
+    }
+
+    public SkillBookColor getColor() {
+        try {
+            return SkillBookColor.valueOf(bookColor().toUpperCase());
+        } catch(IllegalArgumentException exception){
+            return SkillBookColor.BLUE;
+        }
+    }
+
+    public SkillBookTrim getTrim() {
+        try {
+            return SkillBookTrim.valueOf(trimColor().toUpperCase());
+        } catch(IllegalArgumentException exception){
+            return SkillBookTrim.PLAIN;
+        }
     }
 
     @Override
