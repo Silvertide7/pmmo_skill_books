@@ -18,4 +18,9 @@ public final class DataComponentUtil {
             attunementData) {
         stack.set(DataComponentRegistry.SKILL_BOOK_DATA, attunementData);
     }
+
+    public static void addSkillBookData(ItemStack stack, String skill, String applicationType, Long value, String bookColor, String trimColor) {
+        SkillBookData data = new SkillBookData(skill, applicationType, value, bookColor, trimColor);
+        setSkillBookData(stack, data);
+    }
 }

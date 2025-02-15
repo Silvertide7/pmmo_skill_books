@@ -9,6 +9,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silvertide.pmmo_skill_books.PMMOSkillBooks;
+import net.silvertide.pmmo_skill_books.utils.DataComponentUtil;
 
 public class TabRegistry {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, PMMOSkillBooks.MOD_ID);
@@ -19,14 +20,19 @@ public class TabRegistry {
                     .icon(TabRegistry::getIcon)
                     .title(Component.translatable("creative_tab.skill_books"))
                     .displayItems((displayParameters, output) -> {
-//                        ItemRegistry.skillBookItems.forEach((skillBook -> {
-//                            output.accept(skillBook.registryObject().get());
-//                        }));
+                        addSkillBook(output, "endurance", "xp", 2000L, "blue", "gold");
+
                     })
                     .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
                     .build());
 
     private static ItemStack getIcon(){
         return new ItemStack(ItemRegistry.SKILL_BOOK.get());
+    }
+
+    private static void addSkillBook(CreativeModeTab.Output output, String skill, String applicationType, Long value, String bookColor, String trimColor) {
+        ItemStack skillBook = new ItemStack(ItemRegistry.SKILL_BOOK.get());
+        DataComponentUtil.addSkillBookData(skillBook, skill, applicationType, value, bookColor, trimColor);
+        output.accept(skillBook);
     }
 }

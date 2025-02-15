@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.silvertide.pmmo_skill_books.utils.ApplicationType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -35,6 +36,10 @@ public record SkillBookData(String skill, String applicationType, Long applicati
                 buf.writeUtf(skillBookData.trimColor());
             }
         };
+    }
+
+    public ApplicationType getApplicationType() throws IllegalArgumentException {
+        return ApplicationType.valueOf(applicationType().toUpperCase());
     }
 
     @Override

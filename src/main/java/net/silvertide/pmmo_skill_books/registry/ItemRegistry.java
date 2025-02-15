@@ -15,7 +15,8 @@ public class ItemRegistry {
     }
 
     public static DeferredHolder<Item, Item> SKILL_BOOK = ITEMS.register("skill_book", SkillBookItem::new);
-//    public static final List<SkillBook> skillBookItems;
+
+    //    public static final List<SkillBook> skillBookItems;
 //
 //    static {
 //        skillBookItems = new ArrayList<>();

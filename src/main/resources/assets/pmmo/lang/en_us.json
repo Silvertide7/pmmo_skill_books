@@ -1,7 +1,4 @@
 {
-  "pmmo.strength": "Strength",
-  "pmmo.dexterity": "Dexterity",
-  "pmmo.constitution": "Constitution",
-  "pmmo.intelligence": "Intelligence",
-  "pmmo.wisdom": "Wisdom"
+  "item.pmmo_skill_books.skill_book": "Skill Book",
+  "creative_tab.skill_books": "Skill Books"
 }

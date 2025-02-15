@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.silvertide.pmmo_skill_books.registry.DataComponentRegistry;
 import net.silvertide.pmmo_skill_books.registry.ItemRegistry;
 import net.silvertide.pmmo_skill_books.registry.TabRegistry;
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ public class PMMOSkillBooks
 
     public PMMOSkillBooks(IEventBus modEventBus, ModContainer modContainer)
     {
+        DataComponentRegistry.register(modEventBus);
         ItemRegistry.register(modEventBus);
         TabRegistry.register(modEventBus);
     }
