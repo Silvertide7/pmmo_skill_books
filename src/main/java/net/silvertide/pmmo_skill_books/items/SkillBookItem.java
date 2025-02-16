@@ -71,7 +71,7 @@ public class SkillBookItem extends Item {
                         } else {
                             APIUtils.addLevel(skillBookData.skill(), serverPlayer, Math.toIntExact(skillBookData.applicationValue()));
                         }
-                        PlayerMessenger.displayTranslatabelClientMessage(serverPlayer, Component.translatable(SkillBookUtil.getSkillBookEffectTranslationKey(skillBookData), skillBookData.applicationValue(), SkillBookUtil.capitalize(skillBookData.skill())));
+                        PlayerMessenger.displayTranslatabelClientMessage(serverPlayer, Component.translatable(SkillBookUtil.getSkillBookEffectTranslationKey(skillBookData), skillBookData.applicationValue(), skillBookData.getSkillName()));
                     }
                     case ApplicationType.XP -> APIUtils.addXp(skillBookData.skill(), serverPlayer, valueToAdd);
                 }
@@ -95,7 +95,7 @@ public class SkillBookItem extends Item {
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         DataComponentUtil.getSkillBookData(stack).ifPresent(skillBookData -> {
-            tooltipComponents.add(Component.translatable(SkillBookUtil.getSkillBookEffectTranslationKey(skillBookData), skillBookData.applicationValue(), SkillBookUtil.capitalize(skillBookData.skill())));
+            tooltipComponents.add(Component.translatable(SkillBookUtil.getSkillBookEffectTranslationKey(skillBookData), skillBookData.applicationValue(), skillBookData.getSkillName()));
         });
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
     }

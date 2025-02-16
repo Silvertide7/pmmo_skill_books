@@ -31,7 +31,7 @@ public final class SkillBookUtil {
             }
 
             if (PMMOUtil.isPlayerAtMaxLevel(player, skillBookData.skill())) {
-                return new UseSkillBookResult(false, SkillBookUtil.capitalize(skillBookData.skill()) + " is at max level.");
+                return new UseSkillBookResult(false, "pmmo_skill_books.message.max_level");
             }
             return new UseSkillBookResult(true, "");
         }).orElse(new UseSkillBookResult(false, "pmmo_skill_books.message.no_data_found"));
@@ -48,12 +48,5 @@ public final class SkillBookUtil {
         } catch (IllegalArgumentException ignored) {
             return "pmmo_skill_books.message.wrong_effect";
         }
-    }
-
-    public static String capitalize(String input) {
-        if (input == null || input.isEmpty()) {
-            return input;
-        }
-        return input.substring(0, 1).toUpperCase() + input.substring(1);
     }
 }

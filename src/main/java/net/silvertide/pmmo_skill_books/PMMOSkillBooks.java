@@ -21,7 +21,6 @@ public class PMMOSkillBooks
     public static final String MOD_ID = "pmmo_skill_books";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    //TODO: Basic drop rates
     public PMMOSkillBooks(IEventBus modEventBus, ModContainer modContainer)
     {
         DataComponentRegistry.register(modEventBus);

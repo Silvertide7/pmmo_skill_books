@@ -10,6 +10,7 @@
   "pmmo_skill_books.message.no_application_type": "Skill book has no application type [level, xp].",
   "pmmo_skill_books.message.wrong_application_type": "Application type must be level or xp.",
   "pmmo_skill_books.message.no_data_found": "No skill book data found.",
+  "pmmo_skill_books.message.max_level": "Skill is at max level.",
   "pmmo_skill_books.message.use_book_error": "Something went wrong.",
 
   "pmmo_skill_books.message.level_effect": "+%1$s %2$s Level",

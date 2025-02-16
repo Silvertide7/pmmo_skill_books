@@ -3,6 +3,7 @@ package net.silvertide.pmmo_skill_books.items.components;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.silvertide.pmmo_skill_books.data.ApplicationType;
 import net.silvertide.pmmo_skill_books.data.SkillBookColor;
@@ -42,6 +43,10 @@ public record SkillBookData(String skill, String applicationType, Long applicati
 
     public ApplicationType getApplicationType() throws IllegalArgumentException {
         return ApplicationType.valueOf(applicationType().toUpperCase());
+    }
+
+    public String getSkillName() {
+        return Component.translatable("pmmo." + skill()).getString();
     }
 
     public SkillBookColor getColor() {
