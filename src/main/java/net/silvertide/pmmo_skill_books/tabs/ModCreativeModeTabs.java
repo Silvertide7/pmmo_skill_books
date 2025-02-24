@@ -21,10 +21,6 @@ public class ModCreativeModeTabs {
                             output.accept(skillBook.registryObject().get());
                         }));
 
-                        ModItems.classBookItems.forEach((classBook -> {
-                            output.accept(classBook.registryObject().get());
-                        }));
-
                         ModItems.customBookItems.forEach((customBook -> {
                             output.accept(customBook.registryObject().get());
                         }));
@@ -34,6 +30,6 @@ public class ModCreativeModeTabs {
     }
 
     private static ItemStack getIcon(){
-        return new ItemStack(ModItems.classBookItems.get(ModItems.classBookItems.size()-1).registryObject().get());
+        return new ItemStack(ModItems.skillBookItems.get(ModItems.skillBookItems.size()-1).registryObject().get());
     }
 }

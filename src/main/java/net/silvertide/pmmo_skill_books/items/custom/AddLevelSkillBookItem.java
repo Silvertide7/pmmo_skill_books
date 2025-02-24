@@ -15,11 +15,13 @@ public class AddLevelSkillBookItem extends SkillBookItem {
         this.skill = skill;
         this.levelsToAdd = levelsToAdd;
     }
+
     @Override
     protected UseSkillBookResult playerCanUseSkillBook(Player player) {
         if ( APIUtils.getLevel(this.skill, player) >= Config.MAX_LEVEL.get() ) return new UseSkillBookResult(false, SkillBookUtil.capitalize(this.skill) + " is at max level.");
         return new UseSkillBookResult(true, "");
     }
+
     @Override
     protected void useSkillBook(Player player) {
         int currentLevel = APIUtils.getLevel(this.skill, player);

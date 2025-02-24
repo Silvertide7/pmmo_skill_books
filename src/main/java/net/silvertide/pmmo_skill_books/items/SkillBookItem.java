@@ -30,12 +30,12 @@ public abstract class SkillBookItem extends Item {
         if(!pLevel.isClientSide) {
             UseSkillBookResult useResult = playerCanUseSkillBook(pPlayer);
             boolean hasEnoughXP = pPlayer.getAbilities().instabuild || this.xpLevelsConsumed == 0 || pPlayer.experienceLevel >= this.xpLevelsConsumed;
-            if (pPlayer.getAbilities().instabuild || (useResult.isSuccessful() && hasEnoughXP)) {
+            if (pPlayer.getAbilities().instabuild || (useResult.success() && hasEnoughXP)) {
                 pPlayer.startUsingItem(pUsedHand);
                 return InteractionResultHolder.success(itemstack);
             } else {
-                if (!useResult.isSuccessful()){
-                    pPlayer.sendSystemMessage(Component.literal(useResult.getMessage()));
+                if (!useResult.success()){
+                    pPlayer.sendSystemMessage(Component.literal(useResult.message()));
                 } else if (!hasEnoughXP) {
                     pPlayer.sendSystemMessage(Component.literal("Requires " + this.xpLevelsConsumed + " experience levels to use."));
                 }

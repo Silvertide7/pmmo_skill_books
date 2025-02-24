@@ -21,22 +21,14 @@ public class ModItemModelProvider extends ItemModelProvider {
         ModItems.skillBookItems.forEach(skillBook -> {
             skillBookItem(skillBook.registryObject(), getSkillBookColor(skillBook.effect()), getSkillBookTrim(skillBook.effect()));
         });
-
-        ModItems.customBookItems.forEach(customBook -> {
-            skillBookItem(customBook.registryObject(), getSkillBookColor(customBook.effect()), getSkillBookTrim(customBook.effect()));
-        });
-
-        ModItems.classBookItems.forEach(classBook -> {
-            skillBookItem(classBook.registryObject(), getSkillBookColor(classBook.effect()), getSkillBookTrim(classBook.effect()));
-        });
     }
 
     private SkillBookTrim getSkillBookTrim(SkillBookEffect effect) {
         return switch(effect){
-            case ADD_XP_5000, ADD_LEVEL_1, SET_LEVEL_1, COMMAND_1 -> SkillBookTrim.PLAIN;
-            case ADD_XP_10000, ADD_LEVEL_3, SET_LEVEL_2, COMMAND_2 -> SkillBookTrim.GOLD;
-            case ADD_XP_25000, ADD_LEVEL_5, SET_LEVEL_3, COMMAND_3 -> SkillBookTrim.EMERALD;
-            case ADD_XP_50000, ADD_LEVEL_10, SET_LEVEL_4, COMMAND_4 -> SkillBookTrim.DIAMOND;
+            case ADD_XP_5000, ADD_LEVEL_1 -> SkillBookTrim.PLAIN;
+            case ADD_XP_10000, ADD_LEVEL_3 -> SkillBookTrim.GOLD;
+            case ADD_XP_25000, ADD_LEVEL_5 -> SkillBookTrim.EMERALD;
+            case ADD_XP_50000, ADD_LEVEL_10 -> SkillBookTrim.DIAMOND;
         };
     }
 
@@ -44,8 +36,6 @@ public class ModItemModelProvider extends ItemModelProvider {
         return switch(effect){
             case ADD_XP_5000, ADD_XP_10000, ADD_XP_25000, ADD_XP_50000 -> SkillBookColor.GREEN;
             case ADD_LEVEL_1, ADD_LEVEL_3, ADD_LEVEL_5, ADD_LEVEL_10 -> SkillBookColor.PURPLE;
-            case SET_LEVEL_1, SET_LEVEL_2, SET_LEVEL_3, SET_LEVEL_4 -> SkillBookColor.BLACK;
-            case COMMAND_1, COMMAND_2, COMMAND_3, COMMAND_4 -> SkillBookColor.BLUE;
         };
     }
 
