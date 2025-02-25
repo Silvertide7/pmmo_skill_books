@@ -1,124 +1,112 @@
 package net.silvertide.pmmo_skill_books.items;
 
+import harmonised.pmmo.api.APIUtils;
+import harmonised.pmmo.config.Config;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.*;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
-import net.silvertide.pmmo_skill_books.utils.UseSkillBookResult;
+import net.silvertide.pmmo_skill_books.data.UseSkillBookResult;
+import net.silvertide.pmmo_skill_books.util.PlayerMessenger;
+import net.silvertide.pmmo_skill_books.util.SkillBookUtil;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public abstract class SkillBookItem extends Item {
+public class SkillBookItem extends Item {
     private static final int USE_DURATION = 80;
-    private final int xpLevelsConsumed;
-    @Nullable
-    protected String description;
 
-    protected SkillBookItem(Properties properties) {
-        super(new Item.Properties().stacksTo(1).fireResistant().rarity(properties.rarity));
-        this.xpLevelsConsumed = properties.xpLevelsRequired;
-        this.description = properties.description;
+    public SkillBookItem() {
+        super(new Item.Properties().stacksTo(1).fireResistant());
     }
+
     @Override
-    public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
-        ItemStack itemstack = pPlayer.getItemInHand(pUsedHand);
-        if(!pLevel.isClientSide) {
-            UseSkillBookResult useResult = playerCanUseSkillBook(pPlayer);
-            boolean hasEnoughXP = pPlayer.getAbilities().instabuild || this.xpLevelsConsumed == 0 || pPlayer.experienceLevel >= this.xpLevelsConsumed;
-            if (pPlayer.getAbilities().instabuild || (useResult.success() && hasEnoughXP)) {
-                pPlayer.startUsingItem(pUsedHand);
-                return InteractionResultHolder.success(itemstack);
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
+        ItemStack stack = player.getItemInHand(usedHand);
+        if(player instanceof ServerPlayer serverPlayer) {
+            UseSkillBookResult useResult = SkillBookUtil.canPlayerUseSkillBook(serverPlayer, stack);
+            if (useResult.success()) {
+                serverPlayer.startUsingItem(usedHand);
+                return InteractionResultHolder.success(stack);
             } else {
-                if (!useResult.success()){
-                    pPlayer.sendSystemMessage(Component.literal(useResult.message()));
-                } else if (!hasEnoughXP) {
-                    pPlayer.sendSystemMessage(Component.literal("Requires " + this.xpLevelsConsumed + " experience levels to use."));
-                }
+                serverPlayer.sendSystemMessage(Component.translatable(useResult.message()));
             }
         }
-        return InteractionResultHolder.fail(itemstack);
+        return InteractionResultHolder.fail(stack);
     }
 
     @Override
-    public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity pEntityLiving) {
-        Player player = pEntityLiving instanceof Player ? (Player)pEntityLiving : null;
-
-        if (player != null && !pLevel.isClientSide) {
-            boolean stillHasEnoughXP = true;
-            if(!player.getAbilities().instabuild && this.xpLevelsConsumed > 0) {
-                if(player.experienceLevel >= this.xpLevelsConsumed) {
-                    player.giveExperienceLevels(-this.xpLevelsConsumed);
-                } else {
-                    player.sendSystemMessage(Component.literal("Requires " + this.xpLevelsConsumed + " experience levels to use."));
-                    stillHasEnoughXP = false;
-                }
+    public @NotNull ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity livingEntity) {
+        if (livingEntity instanceof ServerPlayer serverPlayer) {
+            useSkillBook(serverPlayer, stack);
+            if (!serverPlayer.getAbilities().instabuild) {
+                stack.shrink(1);
             }
-            if(stillHasEnoughXP) {
-                useSkillBook(player);
-                player.sendSystemMessage(Component.literal(getEffectDescription()));
-                if (!player.getAbilities().instabuild) {
-                    pStack.shrink(1);
-                }
-                ServerLevel serverlevel = (ServerLevel)pLevel;
-                for(int i = 0; i < 30; ++i) {
-                    serverlevel.sendParticles(ParticleTypes.ENCHANT, player.getX() + pLevel.random.nextDouble(), (double)(player.getY() + 1), (double)player.getZ() + pLevel.random.nextDouble(), 1, 0.0D, 0.0D, 0.0D, 1.0D);
-                }
+            ServerLevel serverlevel = (ServerLevel) level;
+            for(int i = 0; i < 30; ++i) {
+                serverlevel.sendParticles(ParticleTypes.ENCHANT, serverPlayer.getX() + level.random.nextDouble(), serverPlayer.getY() + 1, serverPlayer.getZ() + level.random.nextDouble(), 1, 0.0D, 0.0D, 0.0D, 1.0D);
             }
         }
-        return pStack;
+        return stack;
     }
 
-    protected abstract UseSkillBookResult playerCanUseSkillBook(Player player);
+    private void useSkillBook(ServerPlayer serverPlayer, ItemStack stack) {
+        SkillBookUtil.getSkillBookData(stack).ifPresent(skillBookData -> {
+            long currentLevel = APIUtils.getLevel(skillBookData.skill(), serverPlayer);
+            long maxLevel = Config.MAX_LEVEL.get();
 
-    private String getRequirementDescription() {
-        return "Requires " + this.xpLevelsConsumed + " levels to use.";
+            try {
+                long valueToAdd = skillBookData.applicationValue();
+
+                switch(skillBookData.getApplicationType()) {
+                    case LEVEL -> {
+                        if(currentLevel != maxLevel && currentLevel + valueToAdd >= maxLevel) {
+                            APIUtils.setLevel(skillBookData.skill(), serverPlayer, Math.toIntExact(maxLevel));
+                        } else {
+                            APIUtils.addLevel(skillBookData.skill(), serverPlayer, Math.toIntExact(skillBookData.applicationValue()));
+                        }
+                        PlayerMessenger.displayTranslatabelClientMessage(serverPlayer, Component.translatable(SkillBookUtil.getSkillBookEffectTranslationKey(skillBookData), skillBookData.applicationValue(), skillBookData.getSkillName()));
+                    }
+                    case XP -> APIUtils.addXp(skillBookData.skill(), serverPlayer, valueToAdd);
+                }
+
+            } catch(IllegalArgumentException | ArithmeticException ignored) {
+                serverPlayer.sendSystemMessage(Component.translatable("pmmo_skill_books.message.use_book_error"));
+            }
+        });
     }
-
-    protected abstract void useSkillBook(Player player);
-    protected abstract String getEffectDescription();
-    protected abstract String getHoverTextDescription();
 
     @Override
-    public int getUseDuration(ItemStack pStack) {
+    public int getUseDuration(ItemStack stack) {
         return USE_DURATION;
     }
 
     @Override
-    public UseAnim getUseAnimation(ItemStack pStack) {
+    public UseAnim getUseAnimation(ItemStack stack) {
         return UseAnim.BOW;
     }
+
     @Override
-    public void appendHoverText(ItemStack pStack, @org.jetbrains.annotations.Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-        pTooltipComponents.add(Component.literal("§3" + getHoverTextDescription() + "§r"));
-        if(this.xpLevelsConsumed > 0) {
-            pTooltipComponents.add(Component.literal("§aXP Cost: " + this.xpLevelsConsumed + " levels§r"));
-        }
-        super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
+        SkillBookUtil.getSkillBookData(stack).ifPresent(skillBookData -> {
+            tooltipComponents.add(Component.translatable(SkillBookUtil.getSkillBookEffectTranslationKey(skillBookData), skillBookData.applicationValue(), skillBookData.getSkillName()));
+        });
+        super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
     }
 
-    public static class Properties {
-        int xpLevelsRequired = 0;
-        String description;
-        Rarity rarity = Rarity.COMMON;
-
-        public Properties xpLevelsRequired(int xpLevelsRequired){
-            this.xpLevelsRequired = xpLevelsRequired;
-            return this;
-        }
-
-        public Properties description(String description){
-            this.description = description;
-            return this;
-        }
-
-        public Properties rarity(Rarity rarity){
-            this.rarity = rarity;
-            return this;
-        }
+    @Override
+    public String getDescriptionId(ItemStack stack) {
+        return SkillBookUtil.getSkillBookData(stack).map(skillBookData -> switch (skillBookData.getTrim()) {
+            case GOLD -> "item.pmmo_skill_books.gold_skill_book";
+            case EMERALD -> "item.pmmo_skill_books.emerald_skill_book";
+            case DIAMOND -> "item.pmmo_skill_books.diamond_skill_book";
+            default -> super.getDescriptionId(stack);
+        }).orElse(super.getDescriptionId(stack));
     }
 }
