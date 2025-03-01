@@ -6,7 +6,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silvertide.pmmo_skill_books.PMMOSkillBooks;
-import net.silvertide.pmmo_skill_books.items.components.SkillBookData;
+import net.silvertide.pmmo_skill_books.items.components.SkillGrantData;
 
 import java.util.function.UnaryOperator;
 
@@ -14,8 +14,8 @@ public class DataComponentRegistry {
     public static final DeferredRegister<DataComponentType<?>> DATA_COMPONENT_TYPES =
             DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, PMMOSkillBooks.MOD_ID);
 
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<SkillBookData>> SKILL_BOOK_DATA = register("skill_book_data",
-            builder -> builder.persistent(SkillBookData.CODEC).networkSynchronized(SkillBookData.STREAM_CODEC));
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<SkillGrantData>> SKILL_GRANT_DATA = register("skill_grant_data",
+            builder -> builder.persistent(SkillGrantData.CODEC).networkSynchronized(SkillGrantData.STREAM_CODEC));
 
     private static <T> DeferredHolder<DataComponentType<?>, DataComponentType<T>> register(String name,
                                                                                            UnaryOperator<DataComponentType.Builder<T>> builderOperator) {

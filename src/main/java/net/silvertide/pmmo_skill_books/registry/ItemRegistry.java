@@ -6,7 +6,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silvertide.pmmo_skill_books.PMMOSkillBooks;
-import net.silvertide.pmmo_skill_books.items.SkillBookItem;
+import net.silvertide.pmmo_skill_books.items.SkillGrantItem;
 
 public class ItemRegistry {
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(Registries.ITEM, PMMOSkillBooks.MOD_ID);
@@ -14,5 +14,5 @@ public class ItemRegistry {
         ITEMS.register(eventBus);
     }
 
-    public static DeferredHolder<Item, Item> SKILL_BOOK = ITEMS.register("skill_book", SkillBookItem::new);
+    public static DeferredHolder<Item, Item> SKILL_GRANT = ITEMS.register("skill_grant", SkillGrantItem::new);
 }

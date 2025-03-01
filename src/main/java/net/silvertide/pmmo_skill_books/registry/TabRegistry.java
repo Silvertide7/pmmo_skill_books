@@ -9,7 +9,11 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.silvertide.pmmo_skill_books.PMMOSkillBooks;
+import net.silvertide.pmmo_skill_books.items.components.SkillGrantData;
 import net.silvertide.pmmo_skill_books.utils.DataComponentUtil;
+import net.silvertide.pmmo_skill_books.utils.GUIUtil;
+
+import java.util.List;
 
 public class TabRegistry {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, PMMOSkillBooks.MOD_ID);
@@ -48,15 +52,16 @@ public class TabRegistry {
                     .displayItems((displayParameters, output) -> {
 
                         for(String skill : PMMO_SKILLS){
-                            addSkillBook(output, skill, "xp", 1000L, "blue", "plain");
-                            addSkillBook(output, skill, "xp", 5000L, "blue", "gold");
-                            addSkillBook(output, skill, "xp", 10000L, "blue", "emerald");
-                            addSkillBook(output, skill, "xp", 20000L, "blue", "diamond");
+                            List<String> skillList = List.of(skill);
+                            addSkillGrantItem(output, "pmmo_skill_books.plain." + skill, skillList, "xp", 1000L, -1, "blue", "plain");
+                            addSkillGrantItem(output, "pmmo_skill_books.gold." + skill, skillList, "xp", 5000L, -1, "blue", "gold");
+                            addSkillGrantItem(output, "pmmo_skill_books.emerald." + skill, skillList, "xp", 10000L, -1, "blue", "emerald");
+                            addSkillGrantItem(output, "pmmo_skill_books.diamond." + skill, skillList, "xp", 20000L, -1, "blue", "diamond");
 
-                            addSkillBook(output, skill, "level", 1L, "black", "plain");
-                            addSkillBook(output, skill, "level", 3L, "black", "gold");
-                            addSkillBook(output, skill, "level", 5L, "black", "emerald");
-                            addSkillBook(output, skill, "level", 10L, "black", "diamond");
+                            addSkillGrantItem(output, "pmmo_skill_books.plain." + skill, skillList, "level", 1L, -1, "black", "plain");
+                            addSkillGrantItem(output, "pmmo_skill_books.gold." + skill, skillList, "level", 3L, -1, "black", "gold");
+                            addSkillGrantItem(output, "pmmo_skill_books.emerald." + skill, skillList, "level", 5L, -1, "black", "emerald");
+                            addSkillGrantItem(output, "pmmo_skill_books.diamond." + skill, skillList, "level", 10L, -1, "black", "diamond");
                         }
 
                     })
@@ -64,12 +69,12 @@ public class TabRegistry {
                     .build());
 
     private static ItemStack getIcon(){
-        return new ItemStack(ItemRegistry.SKILL_BOOK.get());
+        return new ItemStack(ItemRegistry.SKILL_GRANT.get());
     }
 
-    private static void addSkillBook(CreativeModeTab.Output output, String skill, String applicationType, Long value, String bookColor, String trimColor) {
-        ItemStack skillBook = new ItemStack(ItemRegistry.SKILL_BOOK.get());
-        DataComponentUtil.addSkillBookData(skillBook, skill, applicationType, value, bookColor, trimColor);
-        output.accept(skillBook);
+    private static void addSkillGrantItem(CreativeModeTab.Output output, String name, List<String> skills, String applicationType, Long value, int experienceCost, String color, String rank) {
+        ItemStack skillGrant = new ItemStack(ItemRegistry.SKILL_GRANT.get());
+        DataComponentUtil.addSkillGrantData(skillGrant, name, skills, applicationType, value, experienceCost, color, rank);
+        output.accept(skillGrant);
     }
 }

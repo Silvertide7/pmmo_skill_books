@@ -2,6 +2,7 @@ package net.silvertide.pmmo_skill_books.items;
 
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.config.Config;
+import io.netty.util.internal.StringUtil;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -12,16 +13,16 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.silvertide.pmmo_skill_books.data.ApplicationType;
-import net.silvertide.pmmo_skill_books.data.UseSkillBookResult;
+import net.silvertide.pmmo_skill_books.data.UseSkillGrantResult;
 import net.silvertide.pmmo_skill_books.utils.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class SkillBookItem extends Item {
+public class SkillGrantItem extends Item {
     private static final int USE_DURATION = 80;
 
-    public SkillBookItem() {
+    public SkillGrantItem() {
         super(new Item.Properties().stacksTo(1).fireResistant());
     }
 
@@ -29,7 +30,7 @@ public class SkillBookItem extends Item {
     public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
         ItemStack stack = player.getItemInHand(usedHand);
         if(player instanceof ServerPlayer serverPlayer) {
-            UseSkillBookResult useResult = SkillBookUtil.canPlayerUseSkillBook(serverPlayer, stack);
+            UseSkillGrantResult useResult = SkillBookUtil.canPlayerUseSkillBook(serverPlayer, stack);
             if (useResult.success()) {
                 serverPlayer.startUsingItem(usedHand);
                 return InteractionResultHolder.success(stack);
@@ -57,7 +58,7 @@ public class SkillBookItem extends Item {
     }
 
     private void useSkillBook(ServerPlayer serverPlayer, ItemStack stack) {
-        DataComponentUtil.getSkillBookData(stack).ifPresent(skillBookData -> {
+        DataComponentUtil.getSkillGrantData(stack).ifPresent(skillBookData -> {
             long currentLevel = APIUtils.getLevel(skillBookData.skill(), serverPlayer);
             long maxLevel = Config.server().levels().maxLevel();
 
@@ -94,7 +95,7 @@ public class SkillBookItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-        DataComponentUtil.getSkillBookData(stack).ifPresent(skillBookData -> {
+        DataComponentUtil.getSkillGrantData(stack).ifPresent(skillBookData -> {
             tooltipComponents.add(Component.translatable(SkillBookUtil.getSkillBookEffectTranslationKey(skillBookData), skillBookData.applicationValue(), skillBookData.getSkillName()));
         });
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
@@ -102,12 +103,11 @@ public class SkillBookItem extends Item {
 
     @Override
     public String getDescriptionId(ItemStack stack) {
-        return DataComponentUtil.getSkillBookData(stack).map(skillBookData -> switch(skillBookData.getTrim()) {
-            case PLAIN -> super.getDescriptionId(stack);
-            case GOLD -> "item.pmmo_skill_books.gold_skill_book";
-            case EMERALD -> "item.pmmo_skill_books.emerald_skill_book";
-            case DIAMOND -> "item.pmmo_skill_books.diamond_skill_book";
-            case null -> super.getDescriptionId(stack);
+        return DataComponentUtil.getInsigniaData(stack).map(insigniaData ->  {
+            if(!StringUtil.isNullOrEmpty(insigniaData.name())) {
+                return insigniaData.name();
+            }
+            return super.getDescriptionId(stack);
         }).orElse(super.getDescriptionId(stack));
     }
 }
