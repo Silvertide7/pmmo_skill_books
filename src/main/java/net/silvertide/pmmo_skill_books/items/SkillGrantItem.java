@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class SkillGrantItem extends Item {
-    private static final int USE_DURATION = 80;
+    private static final int USE_DURATION = 60;
 
     public SkillGrantItem() {
         super(new Item.Properties().stacksTo(1).fireResistant());
@@ -58,28 +58,34 @@ public class SkillGrantItem extends Item {
     }
 
     private void useSkillBook(ServerPlayer serverPlayer, ItemStack stack) {
-        DataComponentUtil.getSkillGrantData(stack).ifPresent(skillBookData -> {
-            long currentLevel = APIUtils.getLevel(skillBookData.skill(), serverPlayer);
-            long maxLevel = Config.server().levels().maxLevel();
+        DataComponentUtil.getSkillGrantData(stack).ifPresent(skillGrantData -> {
+            if(skillGrantData.skills().size() == 1) {
+                String skill = skillGrantData.skills().getFirst();
+                long currentLevel = APIUtils.getLevel(skill, serverPlayer);
+                long maxLevel = Config.server().levels().maxLevel();
 
-            try {
-                long valueToAdd = skillBookData.applicationValue();
+                try {
+                    long valueToAdd = skillGrantData.applicationValue();
 
-                switch(skillBookData.getApplicationType()) {
-                    case ApplicationType.LEVEL -> {
-                        if(currentLevel != maxLevel && currentLevel + valueToAdd >= maxLevel) {
-                            APIUtils.setLevel(skillBookData.skill(), serverPlayer, Math.toIntExact(maxLevel));
-                        } else {
-                            APIUtils.addLevel(skillBookData.skill(), serverPlayer, Math.toIntExact(skillBookData.applicationValue()));
+                    switch(skillGrantData.getApplicationType()) {
+                        case ApplicationType.LEVEL -> {
+                            if(currentLevel != maxLevel && currentLevel + valueToAdd >= maxLevel) {
+                                APIUtils.setLevel(skill, serverPlayer, Math.toIntExact(maxLevel));
+                            } else {
+                                APIUtils.addLevel(skill, serverPlayer, Math.toIntExact(skillGrantData.applicationValue()));
+                            }
+                            PlayerMessenger.displayTranslatabelClientMessage(serverPlayer, Component.translatable(SkillBookUtil.getSkillBookEffectTranslationKey(skillGrantData), skillGrantData.applicationValue(), GUIUtil.prettifySkill(skill)));
                         }
-                        PlayerMessenger.displayTranslatabelClientMessage(serverPlayer, Component.translatable(SkillBookUtil.getSkillBookEffectTranslationKey(skillBookData), skillBookData.applicationValue(), skillBookData.getSkillName()));
+                        case ApplicationType.XP -> APIUtils.addXp(skill, serverPlayer, valueToAdd);
                     }
-                    case ApplicationType.XP -> APIUtils.addXp(skillBookData.skill(), serverPlayer, valueToAdd);
-                }
 
-            } catch(IllegalArgumentException | ArithmeticException ignored) {
-                serverPlayer.sendSystemMessage(Component.translatable("pmmo_skill_books.message.use_book_error"));
+                } catch(IllegalArgumentException | ArithmeticException ignored) {
+                    serverPlayer.sendSystemMessage(Component.translatable("pmmo_skill_books.message.use_book_error"));
+                }
+            } else if (skillGrantData.skills().size() > 1) {
+
             }
+
         });
     }
 
@@ -93,17 +99,17 @@ public class SkillGrantItem extends Item {
         return UseAnim.BOW;
     }
 
-    @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-        DataComponentUtil.getSkillGrantData(stack).ifPresent(skillBookData -> {
-            tooltipComponents.add(Component.translatable(SkillBookUtil.getSkillBookEffectTranslationKey(skillBookData), skillBookData.applicationValue(), skillBookData.getSkillName()));
-        });
-        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
-    }
+//    @Override
+//    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+//        DataComponentUtil.getSkillGrantData(stack).ifPresent(skillGrantData -> {
+//            tooltipComponents.add(Component.translatable(SkillBookUtil.getSkillBookEffectTranslationKey(skillGrantData), skillGrantData.applicationValue(), skillGrantData.getSkillName()));
+//        });
+//        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+//    }
 
     @Override
     public String getDescriptionId(ItemStack stack) {
-        return DataComponentUtil.getInsigniaData(stack).map(insigniaData ->  {
+        return DataComponentUtil.getSkillGrantData(stack).map(insigniaData ->  {
             if(!StringUtil.isNullOrEmpty(insigniaData.name())) {
                 return insigniaData.name();
             }

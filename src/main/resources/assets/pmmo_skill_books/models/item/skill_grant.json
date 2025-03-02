@@ -9,6 +9,11 @@
     { "predicate": { "pmmo_skill_books:configuration": 10 }, "model": "pmmo_skill_books:item/skill_book_black" },
     { "predicate": { "pmmo_skill_books:configuration": 12 }, "model": "pmmo_skill_books:item/skill_book_purple" },
 
+    { "predicate": { "pmmo_skill_books:configuration": 25 }, "model": "pmmo_skill_books:item/skill_book_green_iron" },
+    { "predicate": { "pmmo_skill_books:configuration": 27 }, "model": "pmmo_skill_books:item/skill_book_blue_iron" },
+    { "predicate": { "pmmo_skill_books:configuration": 30 }, "model": "pmmo_skill_books:item/skill_book_black_iron" },
+    { "predicate": { "pmmo_skill_books:configuration": 32 }, "model": "pmmo_skill_books:item/skill_book_purple_iron" },
+
     { "predicate": { "pmmo_skill_books:configuration": 45 }, "model": "pmmo_skill_books:item/skill_book_green_gold" },
     { "predicate": { "pmmo_skill_books:configuration": 47 }, "model": "pmmo_skill_books:item/skill_book_blue_gold" },
     { "predicate": { "pmmo_skill_books:configuration": 50 }, "model": "pmmo_skill_books:item/skill_book_black_gold" },

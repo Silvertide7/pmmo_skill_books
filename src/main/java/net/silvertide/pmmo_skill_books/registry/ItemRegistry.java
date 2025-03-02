@@ -13,6 +13,5 @@ public class ItemRegistry {
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }
-
     public static DeferredHolder<Item, Item> SKILL_GRANT = ITEMS.register("skill_grant", SkillGrantItem::new);
 }

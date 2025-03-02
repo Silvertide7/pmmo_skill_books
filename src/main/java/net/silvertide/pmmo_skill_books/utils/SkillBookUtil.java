@@ -12,7 +12,7 @@ public final class SkillBookUtil {
 
     public static UseSkillGrantResult canPlayerUseSkillBook(ServerPlayer player, ItemStack stack) {
         return DataComponentUtil.getSkillGrantData(stack).map(skillBookData -> {
-            if(StringUtil.isBlank(skillBookData.skill())){
+            if(skillBookData.skills().isEmpty()) {
                 return new UseSkillGrantResult(false, "pmmo_skill_books.message.no_skill_specified");
             }
 
@@ -30,9 +30,6 @@ public final class SkillBookUtil {
                 return new UseSkillGrantResult(false, "pmmo_skill_books.message.wrong_application_type");
             }
 
-            if (PMMOUtil.isPlayerAtMaxLevel(player, skillBookData.skill())) {
-                return new UseSkillGrantResult(false, "pmmo_skill_books.message.max_level");
-            }
             return new UseSkillGrantResult(true, "");
         }).orElse(new UseSkillGrantResult(false, "pmmo_skill_books.message.no_data_found"));
 

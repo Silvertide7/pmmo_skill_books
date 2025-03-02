@@ -3,7 +3,6 @@ package net.silvertide.pmmo_skill_books.registry;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.silvertide.pmmo_skill_books.PMMOSkillBooks;
 import net.silvertide.pmmo_skill_books.data.TextureType;
-import net.silvertide.pmmo_skill_books.items.components.SkillGrantData;
 import net.silvertide.pmmo_skill_books.utils.DataComponentUtil;
 
 public class ItemPropertyRegistry {

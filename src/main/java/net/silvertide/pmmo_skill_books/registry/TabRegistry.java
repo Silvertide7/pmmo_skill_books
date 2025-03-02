@@ -51,7 +51,7 @@ public class TabRegistry {
                     .title(Component.translatable("creative_tab.skill_books"))
                     .displayItems((displayParameters, output) -> {
 
-                        for(String skill : PMMO_SKILLS){
+                        for(String skill : PMMO_SKILLS) {
                             List<String> skillList = List.of(skill);
                             addSkillGrantItem(output, "pmmo_skill_books.plain." + skill, skillList, "xp", 1000L, -1, "blue", "plain");
                             addSkillGrantItem(output, "pmmo_skill_books.gold." + skill, skillList, "xp", 5000L, -1, "blue", "gold");
@@ -63,18 +63,17 @@ public class TabRegistry {
                             addSkillGrantItem(output, "pmmo_skill_books.emerald." + skill, skillList, "level", 5L, -1, "black", "emerald");
                             addSkillGrantItem(output, "pmmo_skill_books.diamond." + skill, skillList, "level", 10L, -1, "black", "diamond");
                         }
-
                     })
                     .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
                     .build());
 
-    private static ItemStack getIcon(){
+    private static ItemStack getIcon() {
         return new ItemStack(ItemRegistry.SKILL_GRANT.get());
     }
 
     private static void addSkillGrantItem(CreativeModeTab.Output output, String name, List<String> skills, String applicationType, Long value, int experienceCost, String color, String rank) {
         ItemStack skillGrant = new ItemStack(ItemRegistry.SKILL_GRANT.get());
-        DataComponentUtil.addSkillGrantData(skillGrant, name, skills, applicationType, value, experienceCost, color, rank);
+        DataComponentUtil.addSkillGrantData(skillGrant, name, skills, applicationType, value,  experienceCost, "skillbook", color, rank);
         output.accept(skillGrant);
     }
 }

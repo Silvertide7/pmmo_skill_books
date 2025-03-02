@@ -70,7 +70,7 @@ public record SkillGrantData(String name, List<String> skills, String applicatio
         try {
             return TextureType.valueOf(textureType().toUpperCase());
         } catch(IllegalArgumentException exception){
-            return TextureType.SKILL_BOOK;
+            return TextureType.SKILLBOOK;
         }
     }
 
