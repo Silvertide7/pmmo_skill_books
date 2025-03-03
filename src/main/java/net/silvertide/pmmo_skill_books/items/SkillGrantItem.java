@@ -1,8 +1,10 @@
 package net.silvertide.pmmo_skill_books.items;
 
 import harmonised.pmmo.api.APIUtils;
+import harmonised.pmmo.client.utils.ClientUtils;
 import harmonised.pmmo.config.Config;
 import io.netty.util.internal.StringUtil;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -12,6 +14,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import net.silvertide.pmmo_skill_books.client.ClientUtil;
 import net.silvertide.pmmo_skill_books.data.ApplicationType;
 import net.silvertide.pmmo_skill_books.data.UseSkillGrantResult;
 import net.silvertide.pmmo_skill_books.utils.*;
@@ -44,22 +47,23 @@ public class SkillGrantItem extends Item {
 
     @Override
     public @NotNull ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity livingEntity) {
-        if (livingEntity instanceof ServerPlayer serverPlayer) {
-            useSkillBook(serverPlayer, stack);
-            if (!serverPlayer.getAbilities().instabuild) {
-                stack.shrink(1);
-            }
-            ServerLevel serverlevel = (ServerLevel) level;
-            for(int i = 0; i < 30; ++i) {
-                serverlevel.sendParticles(ParticleTypes.ENCHANT, serverPlayer.getX() + level.random.nextDouble(), serverPlayer.getY() + 1, serverPlayer.getZ() + level.random.nextDouble(), 1, 0.0D, 0.0D, 0.0D, 1.0D);
-            }
+        if (livingEntity instanceof Player player) {
+            useSkillBook(player, stack);
+//            if (!serverPlayer.getAbilities().instabuild) {
+//                stack.shrink(1);
+//            }
+//            ServerLevel serverlevel = (ServerLevel) level;
+//            for(int i = 0; i < 30; ++i) {
+//                serverlevel.sendParticles(ParticleTypes.ENCHANT, serverPlayer.getX() + level.random.nextDouble(), serverPlayer.getY() + 1, serverPlayer.getZ() + level.random.nextDouble(), 1, 0.0D, 0.0D, 0.0D, 1.0D);
+//            }
         }
         return stack;
     }
 
-    private void useSkillBook(ServerPlayer serverPlayer, ItemStack stack) {
+    private void useSkillBook(Player player, ItemStack stack) {
         DataComponentUtil.getSkillGrantData(stack).ifPresent(skillGrantData -> {
-            if(skillGrantData.skills().size() == 1) {
+
+            if(skillGrantData.skills().size() == 1 && player instanceof ServerPlayer serverPlayer) {
                 String skill = skillGrantData.skills().getFirst();
                 long currentLevel = APIUtils.getLevel(skill, serverPlayer);
                 long maxLevel = Config.server().levels().maxLevel();
@@ -82,8 +86,8 @@ public class SkillGrantItem extends Item {
                 } catch(IllegalArgumentException | ArithmeticException ignored) {
                     serverPlayer.sendSystemMessage(Component.translatable("pmmo_skill_books.message.use_book_error"));
                 }
-            } else if (skillGrantData.skills().size() > 1) {
-
+            } else if (skillGrantData.skills().size() > 1 && player instanceof LocalPlayer) {
+                ClientUtil.openSkillGrantScreen(skillGrantData);
             }
 
         });
