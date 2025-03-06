@@ -11,23 +11,27 @@ public final class SkillBookUtil {
     private SkillBookUtil() {}
 
     public static UseSkillGrantResult canPlayerUseSkillBook(ServerPlayer player, ItemStack stack) {
-        return DataComponentUtil.getSkillGrantData(stack).map(skillBookData -> {
-            if(skillBookData.skills().isEmpty()) {
+        return DataComponentUtil.getSkillGrantData(stack).map(skillGrantData -> {
+            if(skillGrantData.skills().isEmpty()) {
                 return new UseSkillGrantResult(false, "pmmo_skill_books.message.no_skill_specified");
             }
 
-            if(skillBookData.applicationValue() <= 0) {
+            if(skillGrantData.applicationValue() <= 0) {
                 return new UseSkillGrantResult(false, "pmmo_skill_books.message.value_zero_or_less");
             }
 
-            if(StringUtil.isBlank(skillBookData.applicationType())) {
+            if(StringUtil.isBlank(skillGrantData.applicationType())) {
                 return new UseSkillGrantResult(false, "pmmo_skill_books.message.no_application_type");
             }
 
             try {
-                ApplicationType.valueOf(skillBookData.applicationType().toUpperCase());
+                ApplicationType.valueOf(skillGrantData.applicationType().toUpperCase());
             } catch(IllegalArgumentException ex) {
                 return new UseSkillGrantResult(false, "pmmo_skill_books.message.wrong_application_type");
+            }
+
+            if(skillGrantData.experienceCost() > 0 && player.experienceLevel < skillGrantData.experienceCost()) {
+                return new UseSkillGrantResult(false, "pmmo_skill_books.message.not_enough_experience");
             }
 
             return new UseSkillGrantResult(true, "");
@@ -35,11 +39,11 @@ public final class SkillBookUtil {
 
     }
 
-    public static String getSkillBookEffectTranslationKey(SkillGrantData skillBookData) {
+    public static String getSkillBookEffectTranslationKey(ApplicationType applicationType, Long applicationValue) {
         try {
             String translateKey = "pmmo_skill_books.message.experience_effect";
-            if(skillBookData.getApplicationType().equals(ApplicationType.LEVEL)) {
-                translateKey = skillBookData.applicationValue() > 1 ? "pmmo_skill_books.message.levels_effect" : "pmmo_skill_books.message.level_effect";
+            if(ApplicationType.LEVEL.equals(applicationType)) {
+                translateKey = applicationValue > 1 ? "pmmo_skill_books.message.levels_effect" : "pmmo_skill_books.message.level_effect";
             }
             return translateKey;
         } catch (IllegalArgumentException ignored) {

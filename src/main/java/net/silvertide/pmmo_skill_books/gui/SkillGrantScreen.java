@@ -1,5 +1,6 @@
 package net.silvertide.pmmo_skill_books.gui;
 
+import harmonised.pmmo.network.Networking;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -8,10 +9,9 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.silvertide.pmmo_skill_books.PMMOSkillBooks;
 import net.silvertide.pmmo_skill_books.items.components.SkillGrantData;
+import net.silvertide.pmmo_skill_books.network.server_packets.SB_GrantSkill;
 import net.silvertide.pmmo_skill_books.utils.GUIUtil;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class SkillGrantScreen extends Screen {
@@ -23,10 +23,10 @@ public class SkillGrantScreen extends Screen {
     private static final int CARD_WIDTH = 108;
 
     //CLOSE BUTTON CONSTANTS
-    private static final int CLOSE_BUTTON_X = 130;
-    private static final int CLOSE_BUTTON_Y = 4;
-    private static final int CLOSE_BUTTON_WIDTH = 12;
-    private static final int CLOSE_BUTTON_HEIGHT = 12;
+    private static final int CONFIRM_BUTTON_X = 23;
+    private static final int CONFIRM_BUTTON_Y = 106;
+    private static final int CONFIRM_BUTTON_WIDTH = 70;
+    private static final int CONFIRM_BUTTON_HEIGHT = 15;
 
     private boolean closeButtonDown = false;
 
@@ -63,7 +63,7 @@ public class SkillGrantScreen extends Screen {
         renderTransparentBackground(guiGraphics);
         renderScreenBackground(guiGraphics);
 //        renderTitle(guiGraphics);
-//        renderCloseButton(guiGraphics, mouseX, mouseY);
+        renderButtons(guiGraphics, mouseX, mouseY);
 //
 //        if(!classCards.isEmpty()) {
 //            for(ClassCard skillRenderer : classCards) {
@@ -73,6 +73,15 @@ public class SkillGrantScreen extends Screen {
 //        } else {
 //            renderNoClassesText(guiGraphics);
 //        }
+    }
+
+    private void renderButtons(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY) {
+        int buttonX = this.getScreenStartX() + CONFIRM_BUTTON_X + CONFIRM_BUTTON_WIDTH / 2;
+        int buttonY = this.getScreenStartY() + CONFIRM_BUTTON_Y + CONFIRM_BUTTON_HEIGHT / 2;
+
+        Component text = Component.literal("Confirm");
+        GUIUtil.drawScaledCenteredWordWrap(guiGraphics, 0.7F, this.font, text, buttonX, buttonY + 13, 100, 0x000000);
+//        guiGraphics.blit(TEXTURE, buttonX, buttonY, 147, buttonOffset, CONFIRM_BUTTON_WIDTH, CONFIRM_BUTTON_HEIGHT);
     }
 
     private void renderScreenBackground(GuiGraphics guiGraphics) {
@@ -93,24 +102,13 @@ public class SkillGrantScreen extends Screen {
 //    }
 //
 //    private void renderCloseButton(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-//        int buttonX = this.getScreenStartX() + CLOSE_BUTTON_X;
-//        int buttonY = this.getScreenStartY() + CLOSE_BUTTON_Y;
+//        int buttonX = this.getScreenStartX() + CONFIRM_BUTTON_X;
+//        int buttonY = this.getScreenStartY() + CONFIRM_BUTTON_Y;
 //
 //        int buttonOffset = getCloseButtonOffsetToRender(mouseX, mouseY);
-//        guiGraphics.blit(TEXTURE, buttonX, buttonY, 147, buttonOffset, CLOSE_BUTTON_WIDTH, CLOSE_BUTTON_HEIGHT);
+//        guiGraphics.blit(TEXTURE, buttonX, buttonY, 147, buttonOffset, CONFIRM_BUTTON_WIDTH, CONFIRM_BUTTON_HEIGHT);
 //    }
 //
-//    private void renderAscendedClassText(@NotNull GuiGraphics guiGraphics) {
-//        if(classCards.size() == 2 && this.classProfile.getAscendedClassSkill() != null) {
-//            int ascendedCardX = this.getScreenStartX() + SCREEN_WIDTH / 2;
-//            int ascendedCardY = this.getScreenStartY() + getBackgroundHeight() / 2 + 34;
-//
-//            guiGraphics.blit(TEXTURE, ascendedCardX - 47, ascendedCardY - 10, 161, 27, 94, 21);
-//
-//            Component skillComponent = Component.literal(GUIUtil.prettifyEnum(this.classProfile.getAscendedClassSkill()));
-//            GUIUtil.drawScaledCenteredWordWrap(guiGraphics, 0.75F, this.font, skillComponent, ascendedCardX, ascendedCardY,100, 0xe6f8fa);
-//        }
-//    }
 //
 //    private int getCloseButtonOffsetToRender(int mouseX, int mouseY) {
 //        if(closeButtonDown) {
@@ -122,12 +120,6 @@ public class SkillGrantScreen extends Screen {
 //        }
 //    }
 //
-//    private int getBackgroundHeight() {
-//        int baseHeight = 30;
-//        int cardHeight = Math.min(classProfile.getNumPrimaryClasses(), 2) * (CARD_HEIGHT + 1);
-//        int ascendedHeight = classProfile.getAscendedClassSkill() != null ? 20 : 0;
-//        return Math.min(baseHeight + cardHeight + ascendedHeight, MAX_SCREEN_HEIGHT);
-//    }
 
     private int getScreenStartX() {
         return (this.width - SCREEN_WIDTH) / 2;
@@ -138,7 +130,7 @@ public class SkillGrantScreen extends Screen {
     }
 
     private boolean isHoveringCloseButton(double mouseX, double mouseY) {
-        return isHovering(CLOSE_BUTTON_X, CLOSE_BUTTON_Y, CLOSE_BUTTON_WIDTH, CLOSE_BUTTON_HEIGHT, mouseX, mouseY);
+        return isHovering(CONFIRM_BUTTON_X, CONFIRM_BUTTON_Y, CONFIRM_BUTTON_WIDTH, CONFIRM_BUTTON_HEIGHT, mouseX, mouseY);
     }
 
     private boolean isHovering(int x, int y, int width, int height, double mouseX, double mouseY) {
@@ -149,6 +141,7 @@ public class SkillGrantScreen extends Screen {
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
         if(closeButtonDown && isHoveringCloseButton(mouseX, mouseY)) {
             this.onClose();
+            Networking.sendToServer(new SB_GrantSkill("arcane", "level", 10L,  10, true));
             return true;
         }
         closeButtonDown = false;

@@ -8,12 +8,19 @@
   "pmmo_skill_books.message.wrong_application_type": "Application type must be level, xp, or set.",
   "pmmo_skill_books.message.no_data_found": "No skill data found.",
   "pmmo_skill_books.message.max_level": "Skill is at max level.",
+  "pmmo_skill_books.message.not_enough_experience": "You don't have enough experience.",
   "pmmo_skill_books.message.use_book_error": "Something went wrong.",
 
   "pmmo_skill_books.message.level_effect": "+%1$s %2$s Level",
   "pmmo_skill_books.message.levels_effect": "+%1$s %2$s Levels",
   "pmmo_skill_books.message.experience_effect": "+%1$s %2$s Experience",
   "pmmo_skill_books.message.wrong_effect": "Invalid application type, must be level or xp.",
+
+  "pmmo_skill_book.network.no_skill": "No skill sent in book.",
+  "pmmo_skill_book.network.no_type": "Bad application type. [xp, level, set]",
+  "pmmo_skill_book.network.no_value": "Value must be greater than 0.",
+  "pmmo_skill_book.network.no_item_in_hand": "Couldn't find item in hand.",
+  "pmmo_skill_book.network.wrong_grant_item": "Item in hand doesn't match skill, type, and/or value.",
 
   "pmmo_skill_books.plain.magic": "Magic Skill Book",
   "pmmo_skill_books.plain.slayer": "Slayer Skill Book",
