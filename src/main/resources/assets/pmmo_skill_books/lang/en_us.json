@@ -11,6 +11,8 @@
   "pmmo_skill_books.message.not_enough_experience": "You don't have enough experience.",
   "pmmo_skill_books.message.use_book_error": "Something went wrong.",
 
+  "pmmo_skill_books.screen.grant_skill.choose_skill": "Choose a skill.",
+
   "pmmo_skill_books.message.level_effect": "+%1$s %2$s Level",
   "pmmo_skill_books.message.levels_effect": "+%1$s %2$s Levels",
   "pmmo_skill_books.message.experience_effect": "+%1$s %2$s Experience",

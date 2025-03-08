@@ -1,7 +1,6 @@
 package net.silvertide.pmmo_skill_books.items;
 
 import harmonised.pmmo.api.APIUtils;
-import harmonised.pmmo.client.utils.ClientUtils;
 import harmonised.pmmo.config.Config;
 import io.netty.util.internal.StringUtil;
 import net.minecraft.client.player.LocalPlayer;
@@ -17,14 +16,11 @@ import net.minecraft.world.level.Level;
 import net.silvertide.pmmo_skill_books.client.ClientUtil;
 import net.silvertide.pmmo_skill_books.data.ApplicationType;
 import net.silvertide.pmmo_skill_books.data.UseSkillGrantResult;
-import net.silvertide.pmmo_skill_books.items.components.SkillGrantData;
 import net.silvertide.pmmo_skill_books.utils.*;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 public class SkillGrantItem extends Item {
-    private static final int USE_DURATION = 60;
+    private static final int USE_DURATION = 10;
 
     public SkillGrantItem() {
         super(new Item.Properties().stacksTo(1).fireResistant());
@@ -34,7 +30,7 @@ public class SkillGrantItem extends Item {
     public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
         ItemStack stack = player.getItemInHand(usedHand);
         if(player instanceof ServerPlayer serverPlayer) {
-            UseSkillGrantResult useResult = SkillBookUtil.canPlayerUseSkillBook(serverPlayer, stack);
+            UseSkillGrantResult useResult = SkillGrantUtil.canPlayerUseSkillBook(serverPlayer, stack);
             if (useResult.success()) {
                 serverPlayer.startUsingItem(usedHand);
                 return InteractionResultHolder.success(stack);
@@ -93,7 +89,7 @@ public class SkillGrantItem extends Item {
             }
 
             PlayerMessenger.displayTranslatabelClientMessage(serverPlayer,
-                    Component.translatable(SkillBookUtil.getSkillBookEffectTranslationKey(applicationType, applicationValue), applicationValue, GUIUtil.prettifySkill(skill)));
+                    Component.translatable(SkillGrantUtil.getSkillBookEffectTranslationKey(applicationType, applicationValue), applicationValue, GUIUtil.prettifySkill(skill)));
 
             payCosts(serverPlayer, stack, experienceCost);
         } catch(IllegalArgumentException | ArithmeticException ignored) {
@@ -133,7 +129,7 @@ public class SkillGrantItem extends Item {
 //    @Override
 //    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
 //        DataComponentUtil.getSkillGrantData(stack).ifPresent(skillGrantData -> {
-//            tooltipComponents.add(Component.translatable(SkillBookUtil.getSkillBookEffectTranslationKey(skillGrantData), skillGrantData.applicationValue(), skillGrantData.getSkillName()));
+//            tooltipComponents.add(Component.translatable(SkillGrantUtil.getSkillBookEffectTranslationKey(skillGrantData), skillGrantData.applicationValue(), skillGrantData.getSkillName()));
 //        });
 //        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
 //    }

@@ -1,6 +1,7 @@
 package net.silvertide.pmmo_skill_books.gui;
 
 import harmonised.pmmo.network.Networking;
+import io.netty.util.internal.StringUtil;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -13,6 +14,9 @@ import net.silvertide.pmmo_skill_books.network.server_packets.SB_GrantSkill;
 import net.silvertide.pmmo_skill_books.utils.GUIUtil;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @OnlyIn(Dist.CLIENT)
 public class SkillGrantScreen extends Screen {
     private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(PMMOSkillBooks.MOD_ID, "textures/gui/gui_skill_grant.png");
@@ -20,34 +24,43 @@ public class SkillGrantScreen extends Screen {
     private static final int SCREEN_HEIGHT = 137;
 
     private static final int CARD_HEIGHT = 25;
-    private static final int CARD_WIDTH = 108;
+    private static final int CARD_WIDTH = 90;
 
     //CLOSE BUTTON CONSTANTS
-    private static final int CONFIRM_BUTTON_X = 23;
+    private static final int CONFIRM_BUTTON_X = 65;
     private static final int CONFIRM_BUTTON_Y = 106;
     private static final int CONFIRM_BUTTON_WIDTH = 70;
     private static final int CONFIRM_BUTTON_HEIGHT = 15;
 
-    private boolean closeButtonDown = false;
+    private static final int CLOSE_BUTTON_X = 23;
+    private static final int CLOSE_BUTTON_Y = 106;
+    private static final int CLOSE_BUTTON_WIDTH = 70;
+    private static final int CLOSE_BUTTON_HEIGHT = 15;
 
-    private SkillGrantData skillGrantData;
+    private boolean closeButtonDown = false;
+    private boolean confirmButtonDown = false;
+
+    private final SkillGrantData skillGrantData;
+
+    private String selectedSkill = "";
+    private int selectedCardIndex = -1;
+    private List<SkillChoiceCard> choiceCards;
 
     public SkillGrantScreen(SkillGrantData skillGrantData) {
         super(Component.literal(""));
         this.skillGrantData = skillGrantData;
+        createSkillChoiceCards();
     }
 
-//    public void createClassCards() {
-//        this.classProfile = new PlayerClassProfile(Minecraft.getInstance().player);
-//        this.classCards = new ArrayList<>();
-//        int index = 0;
-//        for (Map.Entry<PrimaryClassSkill, Experience> entry : this.classProfile.getPrimaryClassMap().entrySet()) {
-//            SubClassSkill subClassSkill = this.classProfile.findMatchingSubClass(entry.getKey()).orElse(null);
-//            ClassCard classSkillRenderer = new ClassCard(this, index, entry.getKey(),entry.getValue().getLevel().getLevel(), subClassSkill);
-//            this.classCards.add(classSkillRenderer);
-//            index++;
-//        }
-//    }
+    public void createSkillChoiceCards() {
+        this.choiceCards = new ArrayList<>();
+        int index = 0;
+        for (String skill : this.skillGrantData.skills()) {
+            SkillChoiceCard skillChoiceCard = new SkillChoiceCard(this, index, skill);
+            this.choiceCards.add(skillChoiceCard);
+            index++;
+        }
+    }
 
     @Override
     public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
@@ -63,25 +76,35 @@ public class SkillGrantScreen extends Screen {
         renderTransparentBackground(guiGraphics);
         renderScreenBackground(guiGraphics);
 //        renderTitle(guiGraphics);
+        renderSkillTitle(guiGraphics);
         renderButtons(guiGraphics, mouseX, mouseY);
-//
-//        if(!classCards.isEmpty()) {
-//            for(ClassCard skillRenderer : classCards) {
-//                skillRenderer.render(guiGraphics, mouseX, mouseY);
-//            }
-//            renderAscendedClassText(guiGraphics);
-//        } else {
-//            renderNoClassesText(guiGraphics);
-//        }
+
+        if(!choiceCards.isEmpty()) {
+            for(SkillChoiceCard choiceCard : choiceCards) {
+                choiceCard.render(guiGraphics, mouseX, mouseY);
+            }
+        }
     }
 
     private void renderButtons(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY) {
+        renderConfirmButton(guiGraphics, mouseX, mouseY);
+        renderCloseButton(guiGraphics, mouseX, mouseY);
+    }
+
+    private void renderConfirmButton(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         int buttonX = this.getScreenStartX() + CONFIRM_BUTTON_X + CONFIRM_BUTTON_WIDTH / 2;
         int buttonY = this.getScreenStartY() + CONFIRM_BUTTON_Y + CONFIRM_BUTTON_HEIGHT / 2;
 
         Component text = Component.literal("Confirm");
         GUIUtil.drawScaledCenteredWordWrap(guiGraphics, 0.7F, this.font, text, buttonX, buttonY + 13, 100, 0x000000);
-//        guiGraphics.blit(TEXTURE, buttonX, buttonY, 147, buttonOffset, CONFIRM_BUTTON_WIDTH, CONFIRM_BUTTON_HEIGHT);
+    }
+
+    private void renderCloseButton(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+        int buttonX = this.getScreenStartX() + CLOSE_BUTTON_X + CLOSE_BUTTON_WIDTH / 2;
+        int buttonY = this.getScreenStartY() + CLOSE_BUTTON_Y + CLOSE_BUTTON_HEIGHT / 2;
+
+        Component text = Component.literal("Cancel");
+        GUIUtil.drawScaledCenteredWordWrap(guiGraphics, 0.7F, this.font, text, buttonX, buttonY + 13, 100, 0x000000);
     }
 
     private void renderScreenBackground(GuiGraphics guiGraphics) {
@@ -91,35 +114,13 @@ public class SkillGrantScreen extends Screen {
         guiGraphics.blit(TEXTURE, x, y, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
 
-//    private void renderTitle(GuiGraphics guiGraphics) {
-//        Component buttonTextComp = Component.translatable("pmmo_classes.screen.manage_classes.title");
-//        GUIUtil.drawScaledCenteredWordWrap(guiGraphics, 0.85F, this.font, buttonTextComp, this.getScreenStartX() + SCREEN_WIDTH / 2, this.getScreenStartY() + 8, 100, 0xFFFFFF);
-//    }
-//
-//    private void renderNoClassesText(GuiGraphics guiGraphics) {
-//        Component buttonTextComp = Component.translatable("pmmo_classes.screen.manage_classes.no_classes_text");
-//        GUIUtil.drawScaledCenteredWordWrap(guiGraphics, 0.7F, this.font, buttonTextComp, this.getScreenStartX() + SCREEN_WIDTH / 2, this.getScreenStartY() + this.getBackgroundHeight() / 2 + 5, 100, 0xFFFFFF);
-//    }
-//
-//    private void renderCloseButton(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-//        int buttonX = this.getScreenStartX() + CONFIRM_BUTTON_X;
-//        int buttonY = this.getScreenStartY() + CONFIRM_BUTTON_Y;
-//
-//        int buttonOffset = getCloseButtonOffsetToRender(mouseX, mouseY);
-//        guiGraphics.blit(TEXTURE, buttonX, buttonY, 147, buttonOffset, CONFIRM_BUTTON_WIDTH, CONFIRM_BUTTON_HEIGHT);
-//    }
-//
-//
-//    private int getCloseButtonOffsetToRender(int mouseX, int mouseY) {
-//        if(closeButtonDown) {
-//            return 52;
-//        } else if (isHoveringCloseButton(mouseX, mouseY)) {
-//            return 39;
-//        } else {
-//            return 26;
-//        }
-//    }
-//
+    private void renderSkillTitle(GuiGraphics guiGraphics) {
+        int textX = this.getScreenStartX() + 148;
+        int textY = this.getScreenStartY() + 15;
+
+        Component buttonTextComp = Component.translatable("pmmo_skill_books.screen.grant_skill.choose_skill");
+        GUIUtil.drawScaledCenteredWordWrap(guiGraphics, 0.85F, this.font, buttonTextComp, textX, textY, 100, 0x000000);
+    }
 
     private int getScreenStartX() {
         return (this.width - SCREEN_WIDTH) / 2;
@@ -127,6 +128,10 @@ public class SkillGrantScreen extends Screen {
 
     private int getScreenStartY() {
         return (this.height - SCREEN_HEIGHT) / 2;
+    }
+
+    private boolean isHoveringConfirmButton(double mouseX, double mouseY) {
+        return isHovering(CONFIRM_BUTTON_X, CONFIRM_BUTTON_Y, CONFIRM_BUTTON_WIDTH, CONFIRM_BUTTON_HEIGHT, mouseX, mouseY);
     }
 
     private boolean isHoveringCloseButton(double mouseX, double mouseY) {
@@ -139,155 +144,141 @@ public class SkillGrantScreen extends Screen {
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        if(closeButtonDown && isHoveringCloseButton(mouseX, mouseY)) {
-            this.onClose();
+        if(confirmButtonDown && isHoveringConfirmButton(mouseX, mouseY)) {
             Networking.sendToServer(new SB_GrantSkill("arcane", "level", 10L,  10, true));
             return true;
+        } else if(closeButtonDown && isHoveringCloseButton(mouseX, mouseY)) {
+            this.onClose();
+//            Networking.sendToServer(new SB_GrantSkill("arcane", "level", 10L,  10, true));
+            return true;
+        } else {
+            for(SkillChoiceCard card : this.choiceCards) {
+                card.mouseReleased();
+            }
         }
+
         closeButtonDown = false;
         return super.mouseReleased(mouseX, mouseY, button);
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if(isHoveringCloseButton(mouseX, mouseY)) {
+        if(isHoveringConfirmButton(mouseX, mouseY) && StringUtil.isNullOrEmpty(this.selectedSkill)) {
+            confirmButtonDown = true;
+            return true;
+        } else if(isHoveringCloseButton(mouseX, mouseY)) {
             closeButtonDown = true;
             return true;
+        } else {
+            for(SkillChoiceCard card : this.choiceCards) {
+                card.mouseClicked();
+            }
         }
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
     public boolean isPauseScreen() { return false; }
-//
-//    private class ClassCard {
-//        private static final int CARD_X = 17;
-//        private static final int CARD_Y = 19;
-//
-//        private final int DELETE_BUTTON_X= 94;
-//        private final int DELETE_BUTTON_Y = 2;
-//        private final int DELETE_BUTTON_WIDTH = 12;
-//        private final int DELETE_BUTTON_HEIGHT = 9;
-//
-//        // Control Data
-//        private boolean isDeleteButtonDown = false;
-//
-//        //Incoming Instance Data
-//        private final SkillGrantScreen skillGrantScreen;
-//        private final int order;
-//        private final PrimaryClassSkill primaryClassSkill;
-//        private int primaryLevel;
-//        private final SubClassSkill subClassSkill;
-//
-//        public ClassCard(SkillGrantScreen skillGrantScreen, int order, PrimaryClassSkill primaryClassSkill, long primaryLevel, SubClassSkill subClassSkill) {
-//            this.skillGrantScreen = skillGrantScreen;
-//            this.order = order;
-//            this.primaryClassSkill = primaryClassSkill;
-//            this.subClassSkill = subClassSkill;
-//
-//            try {
-//                this.primaryLevel = Math.toIntExact(primaryLevel);
-//            } catch (ArithmeticException ex) {
-//                this.primaryLevel = 1;
-//            }
-//        }
-//
-//        public void render(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-//            renderCard(guiGraphics);
-//            renderClassLogo(guiGraphics);
-//            renderCardTitle(guiGraphics);
-//            renderLevel(guiGraphics);
-//            renderDeleteButton(guiGraphics, mouseX, mouseY);
-//        }
-//
-//
-//        private void renderCard(GuiGraphics guiGraphics) {
-//            guiGraphics.blit(TEXTURE, getCardStartX(), getCardStartY(), 147, 0, CARD_WIDTH, CARD_HEIGHT);
-//        }
-//
-//        private void renderClassLogo(GuiGraphics guiGraphics) {
-//            int rankOffset = GUIUtil.getClassRankHorizOffset(primaryLevel);
-//            guiGraphics.blit(CLASS_ICON_TEXTURE, getCardStartX() + 2, getCardStartY() + 2, this.primaryClassSkill.getXOffset() + rankOffset, this.primaryClassSkill.getYOffset(), 21, 21);
-//        }
-//
-//        private void renderCardTitle(GuiGraphics guiGraphics) {
-//            int textOffsetX = 28;
-//            int textOffsetY = 5;
-//            float textScale = 0.7F;
-//
-//            String primaryClassTitle = GUIUtil.prettifyEnum(this.primaryClassSkill);
-//            GUIUtil.drawScaledString(guiGraphics, textScale, skillGrantScreen.font, primaryClassTitle, getCardStartX() + textOffsetX, getCardStartY() + textOffsetY, 0xFFFFFF);
-//
-//            if(this.subClassSkill != null) {
-//                int subClassTextOffsetX = 0;
-//                int subClassTextOffsetY = 8;
-//                float subClassTextScale = 0.5F;
-//
-//                String subClassTitle = GUIUtil.prettifyEnum(this.subClassSkill);
-//                GUIUtil.drawScaledString(guiGraphics, subClassTextScale, skillGrantScreen.font, subClassTitle, getCardStartX() + textOffsetX + subClassTextOffsetX, getCardStartY() + textOffsetY + subClassTextOffsetY, 0xFFFFFF);
-//            }
-//        }
-//
-//        private void renderLevel(GuiGraphics guiGraphics) {
-//            int textOffsetX = 75;
-//            int textOffsetY = 5;
-//            float textScale = 0.6F;
-//
-//            Component levelComp = Component.translatable("screen.text.pmmo_classes.manage.level", primaryLevel);
-//            GUIUtil.drawScaledWordWrap(guiGraphics, textScale, skillGrantScreen.font, levelComp, getCardStartX() + textOffsetX, getCardStartY() + textOffsetY, 40, 0xFFFFFF);
-//        }
-//
-//        private void renderDeleteButton(GuiGraphics guiGraphics, double mouseX, double mouseY) {
-//            if(isHoveringOnCard(0, 0, CARD_WIDTH, CARD_HEIGHT, mouseX, mouseY)){
-//                guiGraphics.blit(TEXTURE, this.getCardStartX() + DELETE_BUTTON_X, this.getCardStartY() + DELETE_BUTTON_Y, 147, getDeleteButtonOffsetToRender(mouseX, mouseY), DELETE_BUTTON_WIDTH, DELETE_BUTTON_HEIGHT);
-//            }
-//        }
-//
-//        private int getDeleteButtonOffsetToRender(double mouseX, double mouseY) {
-//            if(isDeleteButtonDown) {
-//                return 85;
-//            } else if(isHoveringDeleteButton(mouseX, mouseY)) {
-//                return 75;
-//            } else {
-//                return 65;
-//            }
-//        }
-//
-//        public boolean isHoveringDeleteButton(double mouseX, double mouseY) {
-//            return this.isHoveringOnCard(DELETE_BUTTON_X, DELETE_BUTTON_Y, DELETE_BUTTON_WIDTH, DELETE_BUTTON_HEIGHT, mouseX, mouseY);
-//        }
-//
-//        private boolean isHoveringOnCard(int x, int y, int width, int height, double mouseX, double mouseY) {
-//            return GUIUtil.isHovering(getCardStartX(), getCardStartY(), x, y, width, height, mouseX, mouseY);
-//        }
-//
-//        // HELPERS
-//        private int getCardStartX() {
-//            return skillGrantScreen.getScreenStartX() + CARD_X;
-//        }
-//
-//        private int getCardStartY() {
-//            return skillGrantScreen.getScreenStartY() + CARD_Y + (this.order * (CARD_HEIGHT + 1));
-//        }
-//
-//        public void mouseReleased(double mouseX, double mouseY) {
-//            if(isDeleteButtonDown && isHoveringDeleteButton(mouseX, mouseY)) {
-//                handleDeleteButtonPress();
-//            }
-//            this.isDeleteButtonDown = false;
-//        }
-//
-//        private void handleDeleteButtonPress() {
-//            Minecraft minecraft = Minecraft.getInstance();
-//            if(minecraft.gameMode != null) {
-//                minecraft.pushGuiLayer(new DeleteConfirmationScreen(this.skillGrantScreen, this.primaryClassSkill));
-//            }
-//        }
-//
-//        public void mouseClicked(double mouseX, double mouseY) {
-//            if(isHoveringDeleteButton(mouseX, mouseY)) {
-//                this.isDeleteButtonDown = true;
-//            }
-//        }
-//    }
+
+    public String getSelectedSkill() {
+        return selectedSkill;
+    }
+
+    public void setSelectedSkill(int index, String selectedSkill) {
+        this.selectedCardIndex = index;
+        this.selectedSkill = selectedSkill;
+
+        for(SkillChoiceCard choiceCard : this.choiceCards) {
+            choiceCard.setIsSelected(choiceCard.getIndex() == index);
+        }
+    }
+
+
+    private class SkillChoiceCard {
+        private static final int CARD_X = 112;
+        private static final int CARD_Y = 46;
+
+        // Control Data
+        private boolean isCardPressed = false;
+
+        //Incoming Instance Data
+        private final SkillGrantScreen skillGrantScreen;
+        private final int index;
+        private final String skill;
+
+        private boolean isHoveringCard = false;
+        private boolean isSelected = false;
+
+        public SkillChoiceCard(SkillGrantScreen skillGrantScreen, int index, String skill) {
+            this.skillGrantScreen = skillGrantScreen;
+            this.index = index;
+            this.skill = skill;
+        }
+
+        public void render(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+            isHoveringCard = this.isHoveringOnCard(0,0, CARD_WIDTH, CARD_HEIGHT, mouseX, mouseY);
+
+            renderLine(guiGraphics);
+            renderCardTitle(guiGraphics);
+        }
+
+
+        private void renderLine(GuiGraphics guiGraphics) {
+            guiGraphics.blit(TEXTURE, getCardStartX(), getCardStartY() + CARD_HEIGHT, 114, getLineVOffset(), 72, 1);
+        }
+
+        private int getLineVOffset() {
+            if(this.isSelected) {
+                return 141;
+            } else if (this.isHoveringCard)   {
+                return 140;
+            } else {
+                return 139;
+            }
+        }
+
+        private void renderCardTitle(GuiGraphics guiGraphics) {
+            int textOffsetX = 28;
+            int textOffsetY = 5;
+            float textScale = 0.7F;
+
+            GUIUtil.drawScaledString(guiGraphics, textScale, skillGrantScreen.font, this.skill, getCardStartX() + textOffsetX, getCardStartY() + textOffsetY, 0xFFFFFF);
+        }
+
+        private boolean isHoveringOnCard(int x, int y, int width, int height, double mouseX, double mouseY) {
+            return GUIUtil.isHovering(getCardStartX(), getCardStartY(), x, y, width, height, mouseX, mouseY);
+        }
+
+        // HELPERS
+        private int getCardStartX() {
+            return skillGrantScreen.getScreenStartX() + CARD_X;
+        }
+
+        private int getCardStartY() {
+            return skillGrantScreen.getScreenStartY() + CARD_Y + (this.index * (CARD_HEIGHT + 1));
+        }
+
+        public void mouseReleased() {
+            if(isCardPressed && isHoveringCard) {
+                handleCardPress();
+            }
+            this.isCardPressed = false;
+        }
+
+        public void mouseClicked() {
+            if(this.isHoveringCard) this.isCardPressed = true;
+        }
+
+        private void handleCardPress() {
+            this.skillGrantScreen.setSelectedSkill(this.index, this.skill);
+        }
+
+        public void setIsSelected(boolean isSelected) {
+            this.isSelected = isSelected;
+        }
+
+        public int getIndex() {
+            return this.index;
+        }
+    }
 }

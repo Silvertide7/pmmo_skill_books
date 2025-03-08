@@ -5,10 +5,9 @@ import net.minecraft.util.StringUtil;
 import net.minecraft.world.item.ItemStack;
 import net.silvertide.pmmo_skill_books.data.ApplicationType;
 import net.silvertide.pmmo_skill_books.data.UseSkillGrantResult;
-import net.silvertide.pmmo_skill_books.items.components.SkillGrantData;
 
-public final class SkillBookUtil {
-    private SkillBookUtil() {}
+public final class SkillGrantUtil {
+    private SkillGrantUtil() {}
 
     public static UseSkillGrantResult canPlayerUseSkillBook(ServerPlayer player, ItemStack stack) {
         return DataComponentUtil.getSkillGrantData(stack).map(skillGrantData -> {
@@ -30,7 +29,7 @@ public final class SkillBookUtil {
                 return new UseSkillGrantResult(false, "pmmo_skill_books.message.wrong_application_type");
             }
 
-            if(skillGrantData.experienceCost() > 0 && player.experienceLevel < skillGrantData.experienceCost()) {
+            if(!player.getAbilities().instabuild && skillGrantData.experienceCost() > 0 && player.experienceLevel < skillGrantData.experienceCost()) {
                 return new UseSkillGrantResult(false, "pmmo_skill_books.message.not_enough_experience");
             }
 
