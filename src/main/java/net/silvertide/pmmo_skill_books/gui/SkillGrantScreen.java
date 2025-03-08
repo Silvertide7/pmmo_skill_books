@@ -23,21 +23,20 @@ public class SkillGrantScreen extends Screen {
     private static final int SCREEN_WIDTH = 206;
     private static final int SCREEN_HEIGHT = 137;
 
-    private static final int CARD_HEIGHT = 25;
-    private static final int CARD_WIDTH = 90;
-
     //CLOSE BUTTON CONSTANTS
-    private static final int CONFIRM_BUTTON_X = 65;
-    private static final int CONFIRM_BUTTON_Y = 106;
-    private static final int CONFIRM_BUTTON_WIDTH = 70;
-    private static final int CONFIRM_BUTTON_HEIGHT = 15;
+    private static final int CONFIRM_BUTTON_X = 17;
+    private static final int CONFIRM_BUTTON_Y = 109;
+    private static final int CONFIRM_BUTTON_WIDTH = 38;
+    private static final int CONFIRM_BUTTON_HEIGHT = 9;
 
-    private static final int CLOSE_BUTTON_X = 23;
-    private static final int CLOSE_BUTTON_Y = 106;
-    private static final int CLOSE_BUTTON_WIDTH = 70;
-    private static final int CLOSE_BUTTON_HEIGHT = 15;
+    private static final int CLOSE_BUTTON_X = 59;
+    private static final int CLOSE_BUTTON_Y = 109;
+    private static final int CLOSE_BUTTON_WIDTH = 38;
+    private static final int CLOSE_BUTTON_HEIGHT = 9;
 
+    private boolean hoveringCloseButton = false;
     private boolean closeButtonDown = false;
+    private boolean hoveringConfirmButton = false;
     private boolean confirmButtonDown = false;
 
     private final SkillGrantData skillGrantData;
@@ -92,19 +91,73 @@ public class SkillGrantScreen extends Screen {
     }
 
     private void renderConfirmButton(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-        int buttonX = this.getScreenStartX() + CONFIRM_BUTTON_X + CONFIRM_BUTTON_WIDTH / 2;
-        int buttonY = this.getScreenStartY() + CONFIRM_BUTTON_Y + CONFIRM_BUTTON_HEIGHT / 2;
+        int buttonX = this.getScreenStartX() + CONFIRM_BUTTON_X;
+        int buttonY = this.getScreenStartY() + CONFIRM_BUTTON_Y;
+        this.hoveringConfirmButton = isHoveringConfirmButton(mouseX, mouseY);
 
+        guiGraphics.blit(TEXTURE, buttonX, buttonY, 0, getConfirmButtonVertOffset(), CONFIRM_BUTTON_WIDTH, CONFIRM_BUTTON_HEIGHT);
         Component text = Component.literal("Confirm");
-        GUIUtil.drawScaledCenteredWordWrap(guiGraphics, 0.7F, this.font, text, buttonX, buttonY + 13, 100, 0x000000);
+        GUIUtil.drawScaledCenteredWordWrap(guiGraphics, 0.7F, this.font, text, buttonX + CONFIRM_BUTTON_WIDTH / 2, buttonY +  + CONFIRM_BUTTON_HEIGHT / 2, 100, getConfirmTextColor());
+    }
+
+    private int getConfirmButtonVertOffset() {
+        if(this.selectedCardIndex < 0) {
+            return 224;
+        } else if (this.confirmButtonDown) {
+            return 214;
+        } else if (this.hoveringConfirmButton) {
+            return 204;
+        } else {
+            return 194;
+        }
+    }
+
+    private int getConfirmTextColor() {
+        if(this.confirmButtonDown) {
+            return 0xFCF5E5;
+        } else if (this.hoveringConfirmButton) {
+            return 0x000000;
+        } else {
+            return 0x4F4231;
+        }
+    }
+
+    private boolean isHoveringConfirmButton(double mouseX, double mouseY) {
+        return isHovering(CONFIRM_BUTTON_X, CONFIRM_BUTTON_Y, CONFIRM_BUTTON_WIDTH, CONFIRM_BUTTON_HEIGHT, mouseX, mouseY);
     }
 
     private void renderCloseButton(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-        int buttonX = this.getScreenStartX() + CLOSE_BUTTON_X + CLOSE_BUTTON_WIDTH / 2;
-        int buttonY = this.getScreenStartY() + CLOSE_BUTTON_Y + CLOSE_BUTTON_HEIGHT / 2;
+        int buttonX = this.getScreenStartX() + CLOSE_BUTTON_X;
+        int buttonY = this.getScreenStartY() + CLOSE_BUTTON_Y;
+        this.hoveringCloseButton = isHoveringCloseButton(mouseX, mouseY);
 
-        Component text = Component.literal("Cancel");
-        GUIUtil.drawScaledCenteredWordWrap(guiGraphics, 0.7F, this.font, text, buttonX, buttonY + 13, 100, 0x000000);
+        guiGraphics.blit(TEXTURE, buttonX, buttonY, 0, getCloseButtonVertOffset(), CLOSE_BUTTON_WIDTH, CLOSE_BUTTON_HEIGHT);
+        Component text = Component.literal("Close");
+        GUIUtil.drawScaledCenteredWordWrap(guiGraphics, 0.7F, this.font, text, buttonX + CLOSE_BUTTON_WIDTH / 2, buttonY +  + CLOSE_BUTTON_HEIGHT / 2, 100, getCloseTextColor());
+    }
+
+    private int getCloseButtonVertOffset() {
+        if (this.closeButtonDown) {
+            return 214;
+        } else if (this.hoveringCloseButton) {
+            return 204;
+        } else {
+            return 194;
+        }
+    }
+
+    private int getCloseTextColor() {
+        if(this.closeButtonDown) {
+            return 0xFCF5E5;
+        } else if (this.hoveringCloseButton) {
+            return 0x000000;
+        } else {
+            return 0x4F4231;
+        }
+    }
+
+    private boolean isHoveringCloseButton(double mouseX, double mouseY) {
+        return isHovering(CLOSE_BUTTON_X, CLOSE_BUTTON_Y, CLOSE_BUTTON_WIDTH, CLOSE_BUTTON_HEIGHT, mouseX, mouseY);
     }
 
     private void renderScreenBackground(GuiGraphics guiGraphics) {
@@ -130,26 +183,24 @@ public class SkillGrantScreen extends Screen {
         return (this.height - SCREEN_HEIGHT) / 2;
     }
 
-    private boolean isHoveringConfirmButton(double mouseX, double mouseY) {
-        return isHovering(CONFIRM_BUTTON_X, CONFIRM_BUTTON_Y, CONFIRM_BUTTON_WIDTH, CONFIRM_BUTTON_HEIGHT, mouseX, mouseY);
-    }
-
-    private boolean isHoveringCloseButton(double mouseX, double mouseY) {
-        return isHovering(CONFIRM_BUTTON_X, CONFIRM_BUTTON_Y, CONFIRM_BUTTON_WIDTH, CONFIRM_BUTTON_HEIGHT, mouseX, mouseY);
-    }
-
     private boolean isHovering(int x, int y, int width, int height, double mouseX, double mouseY) {
         return GUIUtil.isHovering(this.getScreenStartX(), this.getScreenStartY(), x, y, width, height, mouseX, mouseY);
     }
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        if(confirmButtonDown && isHoveringConfirmButton(mouseX, mouseY)) {
-            Networking.sendToServer(new SB_GrantSkill("arcane", "level", 10L,  10, true));
+        if(this.confirmButtonDown && this.hoveringConfirmButton) {
+            //TODO Check which hand is being used.
+            Networking.sendToServer(new SB_GrantSkill(this.selectedSkill, skillGrantData.applicationType(), skillGrantData.applicationValue(), skillGrantData.experienceCost(), true));
+
+            this.confirmButtonDown = false;
+            this.closeButtonDown = false;
             return true;
-        } else if(closeButtonDown && isHoveringCloseButton(mouseX, mouseY)) {
+        } else if(this.closeButtonDown && this.hoveringCloseButton) {
             this.onClose();
-//            Networking.sendToServer(new SB_GrantSkill("arcane", "level", 10L,  10, true));
+
+            this.confirmButtonDown = false;
+            this.closeButtonDown = false;
             return true;
         } else {
             for(SkillChoiceCard card : this.choiceCards) {
@@ -157,16 +208,17 @@ public class SkillGrantScreen extends Screen {
             }
         }
 
-        closeButtonDown = false;
+        this.confirmButtonDown = false;
+        this.closeButtonDown = false;
         return super.mouseReleased(mouseX, mouseY, button);
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if(isHoveringConfirmButton(mouseX, mouseY) && StringUtil.isNullOrEmpty(this.selectedSkill)) {
+        if(this.hoveringConfirmButton && this.selectedCardIndex >= 0) {
             confirmButtonDown = true;
             return true;
-        } else if(isHoveringCloseButton(mouseX, mouseY)) {
+        } else if(this.hoveringCloseButton) {
             closeButtonDown = true;
             return true;
         } else {
@@ -195,8 +247,10 @@ public class SkillGrantScreen extends Screen {
 
 
     private class SkillChoiceCard {
-        private static final int CARD_X = 112;
-        private static final int CARD_Y = 46;
+        private static final int CARD_X = 108;
+        private static final int CARD_Y = 26;
+        private static final int CARD_WIDTH = 82;
+        private static final int CARD_HEIGHT = 18;
 
         // Control Data
         private boolean isCardPressed = false;
@@ -218,31 +272,42 @@ public class SkillGrantScreen extends Screen {
         public void render(GuiGraphics guiGraphics, int mouseX, int mouseY) {
             isHoveringCard = this.isHoveringOnCard(0,0, CARD_WIDTH, CARD_HEIGHT, mouseX, mouseY);
 
-            renderLine(guiGraphics);
-            renderCardTitle(guiGraphics);
+            renderCard(guiGraphics);
+            renderSkillText(guiGraphics);
         }
 
 
-        private void renderLine(GuiGraphics guiGraphics) {
-            guiGraphics.blit(TEXTURE, getCardStartX(), getCardStartY() + CARD_HEIGHT, 114, getLineVOffset(), 72, 1);
+        private void renderCard(GuiGraphics guiGraphics) {
+            guiGraphics.blit(TEXTURE, getCardStartX(), getCardStartY(), 0, getCardVertOffset(), CARD_WIDTH, CARD_HEIGHT);
         }
 
-        private int getLineVOffset() {
+        private int getCardVertOffset() {
             if(this.isSelected) {
-                return 141;
+                return 175;
             } else if (this.isHoveringCard)   {
-                return 140;
+                return 156;
             } else {
-                return 139;
+                return 137;
             }
         }
 
-        private void renderCardTitle(GuiGraphics guiGraphics) {
-            int textOffsetX = 28;
-            int textOffsetY = 5;
-            float textScale = 0.7F;
+        private void renderSkillText(GuiGraphics guiGraphics) {
+            int textOffsetX = CARD_WIDTH / 2;
+            int textOffsetY = CARD_HEIGHT / 2;
+            float textScale = 0.8F;
 
-            GUIUtil.drawScaledString(guiGraphics, textScale, skillGrantScreen.font, this.skill, getCardStartX() + textOffsetX, getCardStartY() + textOffsetY, 0xFFFFFF);
+            Component skill = Component.translatable("pmmo." + this.skill);
+            GUIUtil.drawScaledCenteredWordWrap(guiGraphics, textScale, skillGrantScreen.font, skill, getCardStartX() + textOffsetX, getCardStartY() + textOffsetY, 90, getSkillTextColor());
+        }
+
+        private int getSkillTextColor() {
+            if(this.isSelected) {
+                return 0xFCF5E5;
+            } else if (this.isHoveringCard) {
+                return 0x000000;
+            } else {
+                return 0x4F4231;
+            }
         }
 
         private boolean isHoveringOnCard(int x, int y, int width, int height, double mouseX, double mouseY) {
@@ -255,7 +320,7 @@ public class SkillGrantScreen extends Screen {
         }
 
         private int getCardStartY() {
-            return skillGrantScreen.getScreenStartY() + CARD_Y + (this.index * (CARD_HEIGHT + 1));
+            return skillGrantScreen.getScreenStartY() + CARD_Y + (this.index * (CARD_HEIGHT + 2));
         }
 
         public void mouseReleased() {
