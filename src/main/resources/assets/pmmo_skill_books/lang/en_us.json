@@ -22,6 +22,9 @@
   "pmmo_skill_books.message.set_effect": "Set %2$s to level %1$s",
   "pmmo_skill_books.message.wrong_effect": "Invalid application type, must be level or xp.",
 
+  "pmmo_skill_books.hovertext.experience_cost": "Costs %1$s XP Level",
+  "pmmo_skill_books.hovertext.experience_cost_plural": "Costs %1$s XP Levels",
+
   "pmmo_skill_book.network.no_skill": "No skill sent in book.",
   "pmmo_skill_book.network.no_type": "Bad application type. [xp, level, set]",
   "pmmo_skill_book.network.no_value": "Value must be greater than 0.",

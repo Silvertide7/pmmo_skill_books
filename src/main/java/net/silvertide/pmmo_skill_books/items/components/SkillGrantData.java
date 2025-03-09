@@ -3,11 +3,13 @@ package net.silvertide.pmmo_skill_books.items.components;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.silvertide.pmmo_skill_books.data.ApplicationType;
 import net.silvertide.pmmo_skill_books.data.Color;
 import net.silvertide.pmmo_skill_books.data.Rank;
 import net.silvertide.pmmo_skill_books.data.TextureType;
+import net.silvertide.pmmo_skill_books.utils.GUIUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -60,6 +62,27 @@ public record SkillGrantData(String name, List<String> skills, String applicatio
                 buf.writeUtf(insigniaData.color());
             }
         };
+    }
+
+    public String getSkillNames() {
+        if(this.skills().size() == 1) {
+            return GUIUtil.getTranslatedSkillString(this.skills().get(0));
+        } else {
+            StringBuilder result = new StringBuilder("[");
+            for(int i = 0; i < this.skills().size(); i++) {
+                result.append(GUIUtil.getTranslatedSkillString(this.skills().get(i)));
+
+                if(i == this.skills().size() - 2) {
+                    result.append(", or ");
+                } else if (i != this.skills().size() - 1) {
+                    result.append(", ");
+                } else {
+
+                }
+            }
+            result.append("]");
+            return result.toString();
+        }
     }
 
     public ApplicationType getApplicationType() throws IllegalArgumentException {

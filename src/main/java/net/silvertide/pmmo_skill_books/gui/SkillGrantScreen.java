@@ -218,7 +218,7 @@ public class SkillGrantScreen extends Screen {
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
         if(this.confirmButtonDown && this.hoveringConfirmButton) {
-            Networking.sendToServer(new SB_GrantSkill(this.selectedSkill, skillGrantData.applicationType(), skillGrantData.applicationValue(), skillGrantData.experienceCost(), true));
+            Networking.sendToServer(new SB_GrantSkill(this.selectedSkill, skillGrantData.applicationType(), skillGrantData.applicationValue(), skillGrantData.experienceCost()));
 
             this.confirmButtonDown = false;
             this.closeButtonDown = false;

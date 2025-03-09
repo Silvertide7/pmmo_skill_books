@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
-public record SB_GrantSkill(String skill, String applicationType, long applicationValue, int experienceCost, boolean inMainHand) implements CustomPacketPayload {
+public record SB_GrantSkill(String skill, String applicationType, long applicationValue, int experienceCost) implements CustomPacketPayload {
     public static final Type<SB_GrantSkill> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(PMMOSkillBooks.MOD_ID, "sb_grant_skill"));
     public static final StreamCodec<FriendlyByteBuf, SB_GrantSkill> STREAM_CODEC = new StreamCodec<>() {
         @Override
@@ -31,8 +31,7 @@ public record SB_GrantSkill(String skill, String applicationType, long applicati
                     buf.readUtf(),
                     buf.readUtf(),
                     buf.readLong(),
-                    buf.readInt(),
-                    buf.readBoolean());
+                    buf.readInt());
         }
         @Override
         public void encode(FriendlyByteBuf buf, SB_GrantSkill grantSkill) {
@@ -40,7 +39,6 @@ public record SB_GrantSkill(String skill, String applicationType, long applicati
             buf.writeUtf(grantSkill.applicationType());
             buf.writeLong(grantSkill.applicationValue());
             buf.writeInt(grantSkill.experienceCost());
-            buf.writeBoolean(grantSkill.inMainHand());
         }
     };
 
@@ -79,26 +77,40 @@ public record SB_GrantSkill(String skill, String applicationType, long applicati
             return new ValidationResult(false, null, Component.translatable("pmmo_skill_book.network.no_value"));
         }
 
-        ItemStack stack = player.getItemInHand(packet.inMainHand() ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND);
-        if(stack.isEmpty()) {
+        ItemStack mainHandStack = player.getItemInHand(InteractionHand.MAIN_HAND);
+        ItemStack offHandStack = player.getItemInHand(InteractionHand.OFF_HAND);
+        if(mainHandStack.isEmpty() && offHandStack.isEmpty()) {
             return new ValidationResult(false, null, Component.translatable("pmmo_skill_book.network.no_item_in_hand"));
         }
 
-        Optional<SkillGrantData> skillGrantData = DataComponentUtil.getSkillGrantData(stack);
-        if(!(stack.getItem() instanceof SkillGrantItem) || skillGrantData.isEmpty()) {
+        ItemStack foundStack = null;
+        // Check main hand stack
+        Optional<SkillGrantData> mainHandSkillGrantData = DataComponentUtil.getSkillGrantData(mainHandStack);
+        if(mainHandStack.getItem() instanceof SkillGrantItem && mainHandSkillGrantData.isPresent() && skillGrantDataMatchesPacket(packet, mainHandSkillGrantData.get())) {
+            foundStack = mainHandStack;
+        }
+
+        // Check offhand stack if stack still not found.
+        if(foundStack == null) {
+            Optional<SkillGrantData> offHandStackData = DataComponentUtil.getSkillGrantData(offHandStack);
+            if(offHandStack.getItem() instanceof SkillGrantItem && offHandStackData.isPresent() && skillGrantDataMatchesPacket(packet, offHandStackData.get())) {
+                foundStack = offHandStack;
+            }
+        }
+
+        if(foundStack == null) {
             return new ValidationResult(false,null, Component.translatable("pmmo_skill_book.network.no_item_in_hand"));
         }
 
-        boolean hasSkillOnItem = skillGrantData.get().skills().stream().anyMatch(skill -> packet.skill().equals(skill));
-        boolean typeMatches = skillGrantData.get().applicationType().equals(packet.applicationType());
-        boolean valueMatches = skillGrantData.get().applicationValue().equals(packet.applicationValue());
-        boolean xpMatches = skillGrantData.get().experienceCost() == packet.experienceCost();
+        return new ValidationResult(true, foundStack, Component.translatable("pmmo_skill_book.network.no_item_in_hand"));
+    }
 
-        if(!hasSkillOnItem || !typeMatches || !valueMatches || !xpMatches) {
-            return new ValidationResult(false, null, Component.translatable("pmmo_skill_book.network.wrong_grant_item"));
-        }
-
-        return new ValidationResult(true, stack, Component.translatable("pmmo_skill_book.network.no_item_in_hand"));
+    private static boolean skillGrantDataMatchesPacket(SB_GrantSkill packet, SkillGrantData skillGrantData) {
+        boolean hasSkillOnItem = skillGrantData.skills().stream().anyMatch(skill -> packet.skill().equals(skill));
+        boolean typeMatches = skillGrantData.applicationType().equals(packet.applicationType());
+        boolean valueMatches = skillGrantData.applicationValue().equals(packet.applicationValue());
+        boolean xpMatches = skillGrantData.experienceCost() == packet.experienceCost();
+        return hasSkillOnItem && typeMatches && valueMatches && xpMatches;
     }
 
     private record ValidationResult(boolean success, ItemStack stackInHand, Component failureMessage){}
