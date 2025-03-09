@@ -43,6 +43,8 @@ public final class SkillGrantUtil {
             String translateKey = "pmmo_skill_books.message.experience_effect";
             if(ApplicationType.LEVEL.equals(applicationType)) {
                 translateKey = applicationValue > 1 ? "pmmo_skill_books.message.levels_effect" : "pmmo_skill_books.message.level_effect";
+            } else if(ApplicationType.SET.equals(applicationType)) {
+                translateKey = "pmmo_skill_books.message.set_effect";
             }
             return translateKey;
         } catch (IllegalArgumentException ignored) {

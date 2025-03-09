@@ -12,10 +12,14 @@
   "pmmo_skill_books.message.use_book_error": "Something went wrong.",
 
   "pmmo_skill_books.screen.grant_skill.choose_skill": "Choose a Skill",
+  "pmmo_skill_books.screen.grant_skill.grant_effect": "Effect",
+  "pmmo_skill_books.screen.grant_skill.confirm": "Confirm",
+  "pmmo_skill_books.screen.grant_skill.close": "Close",
 
   "pmmo_skill_books.message.level_effect": "+%1$s %2$s Level",
   "pmmo_skill_books.message.levels_effect": "+%1$s %2$s Levels",
-  "pmmo_skill_books.message.experience_effect": "+%1$s %2$s Experience",
+  "pmmo_skill_books.message.experience_effect": "+%1$s %2$s xp",
+  "pmmo_skill_books.message.set_effect": "Set %2$s to level %1$s",
   "pmmo_skill_books.message.wrong_effect": "Invalid application type, must be level or xp.",
 
   "pmmo_skill_book.network.no_skill": "No skill sent in book.",
@@ -118,5 +122,7 @@
   "pmmo_skill_books.diamond.sailing": "Diamond Sailing Skill Book",
   "pmmo_skill_books.diamond.hunter": "Diamond Hunter Skill Book",
   "pmmo_skill_books.diamond.archery": "Diamond Archery Skill Book",
-  "pmmo_skill_books.diamond.taming": "Diamond Taming Skill Book"
+  "pmmo_skill_books.diamond.taming": "Diamond Taming Skill Book",
+
+  "pmmo.arcane": "Arcaneee"
 }

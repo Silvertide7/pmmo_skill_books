@@ -1,5 +1,6 @@
 package net.silvertide.pmmo_skill_books.network.server_packets;
 
+import harmonised.pmmo.network.Networking;
 import io.netty.util.internal.StringUtil;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -14,6 +15,7 @@ import net.silvertide.pmmo_skill_books.PMMOSkillBooks;
 import net.silvertide.pmmo_skill_books.data.ApplicationType;
 import net.silvertide.pmmo_skill_books.items.SkillGrantItem;
 import net.silvertide.pmmo_skill_books.items.components.SkillGrantData;
+import net.silvertide.pmmo_skill_books.network.client_packets.CB_CloseSkillGrantScreen;
 import net.silvertide.pmmo_skill_books.utils.DataComponentUtil;
 import net.silvertide.pmmo_skill_books.utils.PlayerMessenger;
 import org.jetbrains.annotations.NotNull;
@@ -50,7 +52,7 @@ public record SB_GrantSkill(String skill, String applicationType, long applicati
                     ItemStack stack = validationResult.stackInHand();
                     if(stack.getItem() instanceof SkillGrantItem skillGrantItem) {
                         skillGrantItem.applyEffects(packet.skill(), ApplicationType.valueOf(packet.applicationType().toUpperCase()), packet.applicationValue(), packet.experienceCost(), serverPlayer, stack);
-
+                        Networking.sendToClient(new CB_CloseSkillGrantScreen(), serverPlayer);
                     }
                 } else {
                     PlayerMessenger.displayTranslatabelClientMessage(serverPlayer, validationResult.failureMessage());

@@ -120,24 +120,9 @@ public final class GUIUtil {
 
     }
 
-    public static String prettifySkill(String skill) {
-        String prettifiedSkill = skill;
-        if(prettifiedSkill.contains("_") || prettifiedSkill.contains(" ") ) {
-            StringBuilder result = new StringBuilder();
-            String[] words = prettifiedSkill.split("[ _]+");
-            for (int i = 0; i < words.length; i++) {
-                String capitalizedWord = words[i].substring(0, 1).toUpperCase() + words[i].substring(1).toLowerCase();
-                result.append(capitalizedWord);
-                if (i < words.length - 1) {
-                    result.append(" ");
-                }
-            }
-            prettifiedSkill = result.toString();
-        } else {
-            prettifiedSkill = prettifiedSkill.substring(0, 1).toUpperCase() + prettifiedSkill.substring(1).toLowerCase();
-        }
-
-        return prettifiedSkill;
+    public static String getTranslatedSkillString(String skill) {
+        Component translated = Component.translatable("pmmo." + skill);
+        return translated.getString();
     }
 
     public static String prettifyName(String resourceLocation) {

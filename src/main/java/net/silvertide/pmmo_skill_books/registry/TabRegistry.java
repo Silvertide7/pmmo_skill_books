@@ -51,6 +51,8 @@ public class TabRegistry {
                     .title(Component.translatable("creative_tab.skill_books"))
                     .displayItems((displayParameters, output) -> {
                         addSkillGrantItem(output, "pmmo_skill_books.diamond.magic", List.of("magic", "arcane", "swimming", "mining"), "level", 10L, 10, "black", "diamond");
+                        addSkillGrantItem(output, "pmmo_skill_books.gold.magic", List.of("magic", "arcane", "swimming", "mining"), "set", 5L, 1, "blue", "gold");
+                        addSkillGrantItem(output, "pmmo_skill_books.iron.magic", List.of("magic", "arcane", "swimming", "mining"), "xp", 5000L, 1, "purple", "iron");
 
                         for(String skill : PMMO_SKILLS) {
                             List<String> skillList = List.of(skill);

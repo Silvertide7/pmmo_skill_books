@@ -1,17 +1,18 @@
 package net.silvertide.pmmo_skill_books.gui;
 
 import harmonised.pmmo.network.Networking;
-import io.netty.util.internal.StringUtil;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.StringUtil;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.silvertide.pmmo_skill_books.PMMOSkillBooks;
 import net.silvertide.pmmo_skill_books.items.components.SkillGrantData;
 import net.silvertide.pmmo_skill_books.network.server_packets.SB_GrantSkill;
 import net.silvertide.pmmo_skill_books.utils.GUIUtil;
+import net.silvertide.pmmo_skill_books.utils.SkillGrantUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -24,12 +25,12 @@ public class SkillGrantScreen extends Screen {
     private static final int SCREEN_HEIGHT = 137;
 
     //CLOSE BUTTON CONSTANTS
-    private static final int CONFIRM_BUTTON_X = 17;
+    private static final int CONFIRM_BUTTON_X = 108;
     private static final int CONFIRM_BUTTON_Y = 109;
     private static final int CONFIRM_BUTTON_WIDTH = 38;
     private static final int CONFIRM_BUTTON_HEIGHT = 9;
 
-    private static final int CLOSE_BUTTON_X = 59;
+    private static final int CLOSE_BUTTON_X = 150;
     private static final int CLOSE_BUTTON_Y = 109;
     private static final int CLOSE_BUTTON_WIDTH = 38;
     private static final int CLOSE_BUTTON_HEIGHT = 9;
@@ -74,8 +75,10 @@ public class SkillGrantScreen extends Screen {
     public void renderBackground(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         renderTransparentBackground(guiGraphics);
         renderScreenBackground(guiGraphics);
-//        renderTitle(guiGraphics);
+
+        renderGrantInformation(guiGraphics);
         renderSkillTitle(guiGraphics);
+        renderGainTitle(guiGraphics);
         renderButtons(guiGraphics, mouseX, mouseY);
 
         if(!choiceCards.isEmpty()) {
@@ -96,7 +99,7 @@ public class SkillGrantScreen extends Screen {
         this.hoveringConfirmButton = isHoveringConfirmButton(mouseX, mouseY);
 
         guiGraphics.blit(TEXTURE, buttonX, buttonY, 0, getConfirmButtonVertOffset(), CONFIRM_BUTTON_WIDTH, CONFIRM_BUTTON_HEIGHT);
-        Component text = Component.literal("Confirm");
+        Component text = Component.translatable("pmmo_skill_books.screen.grant_skill.confirm");
         GUIUtil.drawScaledCenteredWordWrap(guiGraphics, 0.7F, this.font, text, buttonX + CONFIRM_BUTTON_WIDTH / 2, buttonY +  + CONFIRM_BUTTON_HEIGHT / 2, 100, getConfirmTextColor());
     }
 
@@ -113,7 +116,9 @@ public class SkillGrantScreen extends Screen {
     }
 
     private int getConfirmTextColor() {
-        if(this.confirmButtonDown) {
+        if(this.selectedCardIndex < 0) {
+            return 0x6A6969;
+        } else if(this.confirmButtonDown) {
             return 0xFCF5E5;
         } else if (this.hoveringConfirmButton) {
             return 0x000000;
@@ -132,7 +137,7 @@ public class SkillGrantScreen extends Screen {
         this.hoveringCloseButton = isHoveringCloseButton(mouseX, mouseY);
 
         guiGraphics.blit(TEXTURE, buttonX, buttonY, 0, getCloseButtonVertOffset(), CLOSE_BUTTON_WIDTH, CLOSE_BUTTON_HEIGHT);
-        Component text = Component.literal("Close");
+        Component text = Component.translatable("pmmo_skill_books.screen.grant_skill.close");
         GUIUtil.drawScaledCenteredWordWrap(guiGraphics, 0.7F, this.font, text, buttonX + CLOSE_BUTTON_WIDTH / 2, buttonY +  + CLOSE_BUTTON_HEIGHT / 2, 100, getCloseTextColor());
     }
 
@@ -167,11 +172,34 @@ public class SkillGrantScreen extends Screen {
         guiGraphics.blit(TEXTURE, x, y, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
 
+    private void renderGrantInformation(@NotNull GuiGraphics guiGraphics) {
+        int x = this.getScreenStartX() + 150;
+        int y = this.getScreenStartY() + 40;
+
+        String skill = "Skill";
+        if(!StringUtil.isNullOrEmpty(this.selectedSkill)) {
+            skill = GUIUtil.getTranslatedSkillString(this.selectedSkill);
+        }
+
+        Component text = Component.translatable(SkillGrantUtil.getSkillBookEffectTranslationKey(skillGrantData.getApplicationType(), skillGrantData.applicationValue()), skillGrantData.applicationValue(), skill);
+
+        GUIUtil.drawScaledCenteredWordWrap(guiGraphics, 0.70F, this.font, text, x, y, 80, 0x000000);
+
+    }
+
     private void renderSkillTitle(GuiGraphics guiGraphics) {
-        int textX = this.getScreenStartX() + 148;
+        int textX = this.getScreenStartX() + 57;
         int textY = this.getScreenStartY() + 15;
 
         Component buttonTextComp = Component.translatable("pmmo_skill_books.screen.grant_skill.choose_skill");
+        GUIUtil.drawScaledCenteredWordWrap(guiGraphics, 0.85F, this.font, buttonTextComp, textX, textY, 100, 0x000000);
+    }
+
+    private void renderGainTitle(GuiGraphics guiGraphics) {
+        int textX = this.getScreenStartX() + 150;
+        int textY = this.getScreenStartY() + 15;
+
+        Component buttonTextComp = Component.translatable("pmmo_skill_books.screen.grant_skill.grant_effect");
         GUIUtil.drawScaledCenteredWordWrap(guiGraphics, 0.85F, this.font, buttonTextComp, textX, textY, 100, 0x000000);
     }
 
@@ -190,7 +218,6 @@ public class SkillGrantScreen extends Screen {
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
         if(this.confirmButtonDown && this.hoveringConfirmButton) {
-            //TODO Check which hand is being used.
             Networking.sendToServer(new SB_GrantSkill(this.selectedSkill, skillGrantData.applicationType(), skillGrantData.applicationValue(), skillGrantData.experienceCost(), true));
 
             this.confirmButtonDown = false;
@@ -247,7 +274,7 @@ public class SkillGrantScreen extends Screen {
 
 
     private class SkillChoiceCard {
-        private static final int CARD_X = 108;
+        private static final int CARD_X = 17;
         private static final int CARD_Y = 26;
         private static final int CARD_WIDTH = 82;
         private static final int CARD_HEIGHT = 18;

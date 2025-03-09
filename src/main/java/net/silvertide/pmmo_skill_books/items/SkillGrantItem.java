@@ -61,7 +61,7 @@ public class SkillGrantItem extends Item {
     }
 
     public void applyEffects(String skill, ApplicationType applicationType, Long applicationValue, int experienceCost, ServerPlayer serverPlayer, ItemStack stack) {
-        if(experienceCost > serverPlayer.experienceLevel) {
+        if(!serverPlayer.getAbilities().instabuild && experienceCost > serverPlayer.experienceLevel) {
             serverPlayer.sendSystemMessage(Component.translatable("pmmo_skill_books.message.not_enough_experience"));
             return;
         }
@@ -89,7 +89,7 @@ public class SkillGrantItem extends Item {
             }
 
             PlayerMessenger.displayTranslatabelClientMessage(serverPlayer,
-                    Component.translatable(SkillGrantUtil.getSkillBookEffectTranslationKey(applicationType, applicationValue), applicationValue, GUIUtil.prettifySkill(skill)));
+                    Component.translatable(SkillGrantUtil.getSkillBookEffectTranslationKey(applicationType, applicationValue), applicationValue, GUIUtil.getTranslatedSkillString(skill)));
 
             payCosts(serverPlayer, stack, experienceCost);
         } catch(IllegalArgumentException | ArithmeticException ignored) {
