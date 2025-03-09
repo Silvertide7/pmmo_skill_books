@@ -18,7 +18,7 @@
 
   "pmmo_skill_books.message.level_effect": "+%1$s %2$s Level",
   "pmmo_skill_books.message.levels_effect": "+%1$s %2$s Levels",
-  "pmmo_skill_books.message.experience_effect": "+%1$s %2$s xp",
+  "pmmo_skill_books.message.experience_effect": "+%1$s %2$s XP",
   "pmmo_skill_books.message.set_effect": "Set %2$s to level %1$s",
   "pmmo_skill_books.message.wrong_effect": "Invalid application type, must be level or xp.",
 
