@@ -50,21 +50,18 @@ public class TabRegistry {
                     .icon(TabRegistry::getIcon)
                     .title(Component.translatable("creative_tab.skill_books"))
                     .displayItems((displayParameters, output) -> {
-                        addSkillGrantItem(output, "pmmo_skill_books.diamond.magic", List.of("magic", "arcane", "swimming", "mining"), "level", 10L, 10, "black", "diamond");
-                        addSkillGrantItem(output, "pmmo_skill_books.gold.magic", List.of("magic", "arcane", "swimming", "mining"), "set", 5L, 1, "blue", "gold");
-                        addSkillGrantItem(output, "pmmo_skill_books.iron.magic", List.of("magic", "arcane", "swimming", "mining"), "xp", 5000L, 1, "purple", "iron");
 
                         for(String skill : PMMO_SKILLS) {
                             List<String> skillList = List.of(skill);
-                            addSkillGrantItem(output, "pmmo_skill_books.plain." + skill, skillList, "xp", 1000L, -1, "blue", "plain");
-                            addSkillGrantItem(output, "pmmo_skill_books.gold." + skill, skillList, "xp", 5000L, -1, "blue", "gold");
-                            addSkillGrantItem(output, "pmmo_skill_books.emerald." + skill, skillList, "xp", 10000L, -1, "blue", "emerald");
-                            addSkillGrantItem(output, "pmmo_skill_books.diamond." + skill, skillList, "xp", 20000L, -1, "blue", "diamond");
+                            addSkillGrantItem(output, "pmmo_skill_books.plain." + skill, skillList, "xp", 1000L, -1, "plain", "blue");
+                            addSkillGrantItem(output, "pmmo_skill_books.gold." + skill, skillList, "xp", 5000L, -1, "gold", "blue");
+                            addSkillGrantItem(output, "pmmo_skill_books.emerald." + skill, skillList, "xp", 10000L, -1, "emerald", "blue");
+                            addSkillGrantItem(output, "pmmo_skill_books.diamond." + skill, skillList, "xp", 20000L, -1, "diamond", "blue");
 
-                            addSkillGrantItem(output, "pmmo_skill_books.plain." + skill, skillList, "level", 1L, -1, "black", "plain");
-                            addSkillGrantItem(output, "pmmo_skill_books.gold." + skill, skillList, "level", 3L, -1, "black", "gold");
-                            addSkillGrantItem(output, "pmmo_skill_books.emerald." + skill, skillList, "level", 5L, -1, "black", "emerald");
-                            addSkillGrantItem(output, "pmmo_skill_books.diamond." + skill, skillList, "level", 10L, -1, "black", "diamond");
+                            addSkillGrantItem(output, "pmmo_skill_books.plain." + skill, skillList, "level", 1L, -1, "plain", "black");
+                            addSkillGrantItem(output, "pmmo_skill_books.gold." + skill, skillList, "level", 3L, -1, "gold", "black");
+                            addSkillGrantItem(output, "pmmo_skill_books.emerald." + skill, skillList, "level", 5L, -1, "emerald", "black");
+                            addSkillGrantItem(output, "pmmo_skill_books.diamond." + skill, skillList, "level", 10L, -1, "diamond", "black");
                         }
                     })
                     .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
@@ -74,9 +71,9 @@ public class TabRegistry {
         return new ItemStack(ItemRegistry.SKILL_GRANT.get());
     }
 
-    private static void addSkillGrantItem(CreativeModeTab.Output output, String name, List<String> skills, String applicationType, Long value, int experienceCost, String color, String rank) {
+    private static void addSkillGrantItem(CreativeModeTab.Output output, String name, List<String> skills, String applicationType, Long value, int experienceCost, String rank, String color) {
         ItemStack skillGrant = new ItemStack(ItemRegistry.SKILL_GRANT.get());
-        DataComponentUtil.addSkillGrantData(skillGrant, name, skills, applicationType, value,  experienceCost, "skillbook", color, rank);
+        DataComponentUtil.addSkillGrantData(skillGrant, name, skills, applicationType, value,  experienceCost, "skillbook", rank, color);
         output.accept(skillGrant);
     }
 }

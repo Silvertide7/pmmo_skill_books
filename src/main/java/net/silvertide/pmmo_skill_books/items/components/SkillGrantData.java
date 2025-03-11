@@ -99,7 +99,7 @@ public record SkillGrantData(String name, List<String> skills, String applicatio
 
     public Color getColor() {
         try {
-            return Color.valueOf(rank().toUpperCase());
+            return Color.valueOf(color().toUpperCase());
         } catch(IllegalArgumentException exception){
             return Color.RED;
         }
@@ -107,7 +107,7 @@ public record SkillGrantData(String name, List<String> skills, String applicatio
 
     public Rank getRank() {
         try {
-            return Rank.valueOf(color().toUpperCase());
+            return Rank.valueOf(rank().toUpperCase());
         } catch(IllegalArgumentException exception){
             return Rank.PLAIN;
         }

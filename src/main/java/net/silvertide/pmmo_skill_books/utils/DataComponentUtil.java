@@ -19,8 +19,8 @@ public final class DataComponentUtil {
         stack.set(DataComponentRegistry.SKILL_GRANT_DATA, attunementData);
     }
 
-    public static void addSkillGrantData(ItemStack stack, String name, List<String> skills, String applicationType, Long value, int experienceCost, String textureType, String bookColor, String trimColor) {
-        SkillGrantData data = new SkillGrantData(name, skills, applicationType, value, experienceCost, textureType, bookColor, trimColor);
+    public static void addSkillGrantData(ItemStack stack, String name, List<String> skills, String applicationType, Long value, int experienceCost, String textureType, String rank, String color) {
+        SkillGrantData data = new SkillGrantData(name, skills, applicationType, value, experienceCost, textureType, rank, color);
         setSkillGrantData(stack, data);
     }
 }
