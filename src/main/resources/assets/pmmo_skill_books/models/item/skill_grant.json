@@ -30,8 +30,18 @@
     { "predicate": { "pmmo_skill_books:configuration": 92 }, "model": "pmmo_skill_books:item/skill_book_purple_diamond" },
 
     { "predicate": { "pmmo_skill_books:configuration": 101 }, "model": "pmmo_skill_books:item/insignia_teal" },
+    { "predicate": { "pmmo_skill_books:configuration": 102 }, "model": "pmmo_skill_books:item/insignia_orange" },
+    { "predicate": { "pmmo_skill_books:configuration": 103 }, "model": "pmmo_skill_books:item/insignia_light_purple" },
     { "predicate": { "pmmo_skill_books:configuration": 104 }, "model": "pmmo_skill_books:item/insignia_white" },
+    { "predicate": { "pmmo_skill_books:configuration": 105 }, "model": "pmmo_skill_books:item/insignia_green" },
+    { "predicate": { "pmmo_skill_books:configuration": 106 }, "model": "pmmo_skill_books:item/insignia_red" },
+    { "predicate": { "pmmo_skill_books:configuration": 107 }, "model": "pmmo_skill_books:item/insignia_blue" },
+    { "predicate": { "pmmo_skill_books:configuration": 108 }, "model": "pmmo_skill_books:item/insignia_yellow" },
+    { "predicate": { "pmmo_skill_books:configuration": 109 }, "model": "pmmo_skill_books:item/insignia_light_green" },
+    { "predicate": { "pmmo_skill_books:configuration": 110 }, "model": "pmmo_skill_books:item/insignia_black" },
+    { "predicate": { "pmmo_skill_books:configuration": 111 }, "model": "pmmo_skill_books:item/insignia_pink" },
     { "predicate": { "pmmo_skill_books:configuration": 112 }, "model": "pmmo_skill_books:item/insignia_purple" },
+    { "predicate": { "pmmo_skill_books:configuration": 113 }, "model": "pmmo_skill_books:item/insignia_light_blue" },
 
     { "predicate": { "pmmo_skill_books:configuration": 121 }, "model": "pmmo_skill_books:item/insignia_teal_iron" },
     { "predicate": { "pmmo_skill_books:configuration": 124 }, "model": "pmmo_skill_books:item/insignia_white_iron" },
