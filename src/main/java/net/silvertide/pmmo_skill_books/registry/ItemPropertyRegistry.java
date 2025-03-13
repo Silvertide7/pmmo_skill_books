@@ -1,6 +1,5 @@
 package net.silvertide.pmmo_skill_books.registry;
 
-import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.silvertide.pmmo_skill_books.PMMOSkillBooks;
