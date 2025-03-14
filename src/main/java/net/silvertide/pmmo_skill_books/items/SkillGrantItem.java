@@ -6,24 +6,20 @@ import io.netty.util.internal.StringUtil;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.*;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.common.NeoForge;
 import net.silvertide.pmmo_skill_books.client.ClientUtil;
 import net.silvertide.pmmo_skill_books.data.ApplicationType;
-import net.silvertide.pmmo_skill_books.data.Color;
 import net.silvertide.pmmo_skill_books.data.UseSkillGrantResult;
+import net.silvertide.pmmo_skill_books.events.SkillGrantEvent;
 import net.silvertide.pmmo_skill_books.utils.*;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -77,31 +73,34 @@ public class SkillGrantItem extends Item {
         long currentLevel = APIUtils.getLevel(skill, serverPlayer);
         long maxLevel = Config.server().levels().maxLevel();
 
-        try {
-            switch(applicationType) {
-                case ApplicationType.LEVEL -> {
-                    if(currentLevel != maxLevel && currentLevel + applicationValue >= maxLevel) {
-                        APIUtils.setLevel(skill, serverPlayer, Math.toIntExact(maxLevel));
-                    } else {
-                        APIUtils.addLevel(skill, serverPlayer, Math.toIntExact(applicationValue));
+        if(!NeoForge.EVENT_BUS.post(new SkillGrantEvent.Pre(serverPlayer, skill, applicationType.name(), applicationValue)).isCanceled()) {
+            try {
+                switch(applicationType) {
+                    case ApplicationType.LEVEL -> {
+                        if(currentLevel != maxLevel && currentLevel + applicationValue >= maxLevel) {
+                            APIUtils.setLevel(skill, serverPlayer, Math.toIntExact(maxLevel));
+                        } else {
+                            APIUtils.addLevel(skill, serverPlayer, Math.toIntExact(applicationValue));
+                        }
+                    }
+                    case ApplicationType.XP -> APIUtils.addXp(skill, serverPlayer, applicationValue);
+                    case ApplicationType.SET -> {
+                        if(applicationValue > maxLevel) {
+                            APIUtils.setLevel(skill, serverPlayer, Math.toIntExact(maxLevel));
+                        } else {
+                            APIUtils.setLevel(skill, serverPlayer, Math.toIntExact(applicationValue));
+                        }
                     }
                 }
-                case ApplicationType.XP -> APIUtils.addXp(skill, serverPlayer, applicationValue);
-                case ApplicationType.SET -> {
-                    if(applicationValue > maxLevel) {
-                        APIUtils.setLevel(skill, serverPlayer, Math.toIntExact(maxLevel));
-                    } else {
-                        APIUtils.setLevel(skill, serverPlayer, Math.toIntExact(applicationValue));
-                    }
-                }
+
+                PlayerMessenger.displayTranslatabelClientMessage(serverPlayer,
+                        Component.translatable(SkillGrantUtil.getSkillBookEffectTranslationKey(applicationType, applicationValue), applicationValue, GUIUtil.getTranslatedSkillString(skill)));
+
+                payCosts(serverPlayer, stack, experienceCost);
+                NeoForge.EVENT_BUS.post(new SkillGrantEvent.Post(serverPlayer, skill, applicationType.name(), applicationValue));
+            } catch(IllegalArgumentException | ArithmeticException ignored) {
+                serverPlayer.sendSystemMessage(Component.translatable("pmmo_skill_books.message.use_book_error").withColor(0xfe7878));
             }
-
-            PlayerMessenger.displayTranslatabelClientMessage(serverPlayer,
-                    Component.translatable(SkillGrantUtil.getSkillBookEffectTranslationKey(applicationType, applicationValue), applicationValue, GUIUtil.getTranslatedSkillString(skill)));
-
-            payCosts(serverPlayer, stack, experienceCost);
-        } catch(IllegalArgumentException | ArithmeticException ignored) {
-            serverPlayer.sendSystemMessage(Component.translatable("pmmo_skill_books.message.use_book_error").withColor(0xfe7878));
         }
     }
 
