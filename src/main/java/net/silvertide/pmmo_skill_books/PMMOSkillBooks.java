@@ -1,6 +1,7 @@
 package net.silvertide.pmmo_skill_books;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -15,6 +16,7 @@ import net.silvertide.pmmo_skill_books.registry.ItemRegistry;
 import net.silvertide.pmmo_skill_books.registry.TabRegistry;
 import org.slf4j.Logger;
 
+
 @Mod(PMMOSkillBooks.MOD_ID)
 public class PMMOSkillBooks
 {
@@ -28,11 +30,11 @@ public class PMMOSkillBooks
         TabRegistry.register(modEventBus);
     }
 
-    @EventBusSubscriber(modid = MOD_ID, bus= EventBusSubscriber.Bus.MOD, value=Dist.CLIENT)
+    @EventBusSubscriber(modid = MOD_ID, bus = EventBusSubscriber.Bus.MOD, value=Dist.CLIENT)
     public static class ClientEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent clientSetupEvent) {
-            ItemPropertyRegistry.addCustomItemProperties();
+            clientSetupEvent.enqueueWork(() -> ItemProperties.register(ItemRegistry.SKILL_GRANT.get(), ItemPropertyRegistry.SKILL_GRANT_PROPERTY, (stack, level, entity, seed) -> ItemPropertyRegistry.getSkillGrantConfiguration(stack)));
         }
     }
 

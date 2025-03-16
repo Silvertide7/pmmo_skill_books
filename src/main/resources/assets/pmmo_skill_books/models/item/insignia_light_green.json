@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "pmmo_skill_books:item/insignia_light_green"
+  }
+}

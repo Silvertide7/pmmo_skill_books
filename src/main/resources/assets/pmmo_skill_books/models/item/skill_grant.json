@@ -1,0 +1,66 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "pmmo_skill_books:item/skill_book_blue"
+  },
+  "overrides": [
+    { "predicate": { "pmmo_skill_books:configuration": 5 }, "model": "pmmo_skill_books:item/skill_book_green" },
+    { "predicate": { "pmmo_skill_books:configuration": 7 }, "model": "pmmo_skill_books:item/skill_book_blue" },
+    { "predicate": { "pmmo_skill_books:configuration": 10 }, "model": "pmmo_skill_books:item/skill_book_black" },
+    { "predicate": { "pmmo_skill_books:configuration": 12 }, "model": "pmmo_skill_books:item/skill_book_purple" },
+
+    { "predicate": { "pmmo_skill_books:configuration": 25 }, "model": "pmmo_skill_books:item/skill_book_green_iron" },
+    { "predicate": { "pmmo_skill_books:configuration": 27 }, "model": "pmmo_skill_books:item/skill_book_blue_iron" },
+    { "predicate": { "pmmo_skill_books:configuration": 30 }, "model": "pmmo_skill_books:item/skill_book_black_iron" },
+    { "predicate": { "pmmo_skill_books:configuration": 32 }, "model": "pmmo_skill_books:item/skill_book_purple_iron" },
+
+    { "predicate": { "pmmo_skill_books:configuration": 45 }, "model": "pmmo_skill_books:item/skill_book_green_gold" },
+    { "predicate": { "pmmo_skill_books:configuration": 47 }, "model": "pmmo_skill_books:item/skill_book_blue_gold" },
+    { "predicate": { "pmmo_skill_books:configuration": 50 }, "model": "pmmo_skill_books:item/skill_book_black_gold" },
+    { "predicate": { "pmmo_skill_books:configuration": 52 }, "model": "pmmo_skill_books:item/skill_book_purple_gold" },
+
+    { "predicate": { "pmmo_skill_books:configuration": 65 }, "model": "pmmo_skill_books:item/skill_book_green_emerald" },
+    { "predicate": { "pmmo_skill_books:configuration": 67 }, "model": "pmmo_skill_books:item/skill_book_blue_emerald" },
+    { "predicate": { "pmmo_skill_books:configuration": 70 }, "model": "pmmo_skill_books:item/skill_book_black_emerald" },
+    { "predicate": { "pmmo_skill_books:configuration": 72 }, "model": "pmmo_skill_books:item/skill_book_purple_emerald" },
+
+    { "predicate": { "pmmo_skill_books:configuration": 85 }, "model": "pmmo_skill_books:item/skill_book_green_diamond" },
+    { "predicate": { "pmmo_skill_books:configuration": 87 }, "model": "pmmo_skill_books:item/skill_book_blue_diamond" },
+    { "predicate": { "pmmo_skill_books:configuration": 90 }, "model": "pmmo_skill_books:item/skill_book_black_diamond" },
+    { "predicate": { "pmmo_skill_books:configuration": 92 }, "model": "pmmo_skill_books:item/skill_book_purple_diamond" },
+
+    { "predicate": { "pmmo_skill_books:configuration": 101 }, "model": "pmmo_skill_books:item/insignia_teal" },
+    { "predicate": { "pmmo_skill_books:configuration": 102 }, "model": "pmmo_skill_books:item/insignia_orange" },
+    { "predicate": { "pmmo_skill_books:configuration": 103 }, "model": "pmmo_skill_books:item/insignia_light_purple" },
+    { "predicate": { "pmmo_skill_books:configuration": 104 }, "model": "pmmo_skill_books:item/insignia_white" },
+    { "predicate": { "pmmo_skill_books:configuration": 105 }, "model": "pmmo_skill_books:item/insignia_green" },
+    { "predicate": { "pmmo_skill_books:configuration": 106 }, "model": "pmmo_skill_books:item/insignia_red" },
+    { "predicate": { "pmmo_skill_books:configuration": 107 }, "model": "pmmo_skill_books:item/insignia_blue" },
+    { "predicate": { "pmmo_skill_books:configuration": 108 }, "model": "pmmo_skill_books:item/insignia_yellow" },
+    { "predicate": { "pmmo_skill_books:configuration": 109 }, "model": "pmmo_skill_books:item/insignia_light_green" },
+    { "predicate": { "pmmo_skill_books:configuration": 110 }, "model": "pmmo_skill_books:item/insignia_black" },
+    { "predicate": { "pmmo_skill_books:configuration": 111 }, "model": "pmmo_skill_books:item/insignia_pink" },
+    { "predicate": { "pmmo_skill_books:configuration": 112 }, "model": "pmmo_skill_books:item/insignia_purple" },
+    { "predicate": { "pmmo_skill_books:configuration": 113 }, "model": "pmmo_skill_books:item/insignia_light_blue" },
+
+    { "predicate": { "pmmo_skill_books:configuration": 121 }, "model": "pmmo_skill_books:item/insignia_teal_iron" },
+    { "predicate": { "pmmo_skill_books:configuration": 124 }, "model": "pmmo_skill_books:item/insignia_white_iron" },
+    { "predicate": { "pmmo_skill_books:configuration": 126 }, "model": "pmmo_skill_books:item/insignia_red_iron" },
+    { "predicate": { "pmmo_skill_books:configuration": 132 }, "model": "pmmo_skill_books:item/insignia_purple_iron" },
+
+    { "predicate": { "pmmo_skill_books:configuration": 141 }, "model": "pmmo_skill_books:item/insignia_teal_gold" },
+    { "predicate": { "pmmo_skill_books:configuration": 144 }, "model": "pmmo_skill_books:item/insignia_white_gold" },
+    { "predicate": { "pmmo_skill_books:configuration": 146 }, "model": "pmmo_skill_books:item/insignia_red_gold" },
+    { "predicate": { "pmmo_skill_books:configuration": 152 }, "model": "pmmo_skill_books:item/insignia_purple_gold" },
+
+    { "predicate": { "pmmo_skill_books:configuration": 161 }, "model": "pmmo_skill_books:item/insignia_teal_emerald" },
+    { "predicate": { "pmmo_skill_books:configuration": 164 }, "model": "pmmo_skill_books:item/insignia_white_emerald" },
+    { "predicate": { "pmmo_skill_books:configuration": 166 }, "model": "pmmo_skill_books:item/insignia_red_emerald" },
+    { "predicate": { "pmmo_skill_books:configuration": 172 }, "model": "pmmo_skill_books:item/insignia_purple_emerald" },
+
+    { "predicate": { "pmmo_skill_books:configuration": 181 }, "model": "pmmo_skill_books:item/insignia_teal_diamond" },
+    { "predicate": { "pmmo_skill_books:configuration": 184 }, "model": "pmmo_skill_books:item/insignia_white_diamond" },
+    { "predicate": { "pmmo_skill_books:configuration": 186 }, "model": "pmmo_skill_books:item/insignia_red_diamond" },
+    { "predicate": { "pmmo_skill_books:configuration": 192 }, "model": "pmmo_skill_books:item/insignia_purple_diamond" }
+  ]
+}
