@@ -321,7 +321,7 @@ public class SkillGrantScreen extends Screen {
         private void renderSkillText(GuiGraphics guiGraphics) {
             int textOffsetX = CARD_WIDTH / 2;
             int textOffsetY = CARD_HEIGHT / 2;
-            float textScale = 0.8F;
+            float textScale = 0.7F;
 
             Component skill = Component.translatable("pmmo." + this.skill);
             GUIUtil.drawScaledCenteredWordWrap(guiGraphics, textScale, skillGrantScreen.font, skill, getCardStartX() + textOffsetX, getCardStartY() + textOffsetY, 90, getSkillTextColor());
