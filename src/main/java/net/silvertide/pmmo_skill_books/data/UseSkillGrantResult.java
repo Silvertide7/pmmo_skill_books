@@ -1,3 +1,5 @@
 package net.silvertide.pmmo_skill_books.data;
 
-public record UseSkillGrantResult(boolean success, String message) {}
+import net.minecraft.network.chat.MutableComponent;
+
+public record UseSkillGrantResult(boolean success, MutableComponent message) {}

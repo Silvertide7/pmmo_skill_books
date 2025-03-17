@@ -1,9 +1,7 @@
 package net.silvertide.pmmo_skill_books.items;
 
 import harmonised.pmmo.api.APIUtils;
-import harmonised.pmmo.config.Config;
 import io.netty.util.internal.StringUtil;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -39,7 +37,7 @@ public class SkillGrantItem extends Item {
                 serverPlayer.startUsingItem(usedHand);
                 return InteractionResultHolder.success(stack);
             } else {
-                serverPlayer.sendSystemMessage(Component.translatable(useResult.message()).withColor(0xfe7878));
+                serverPlayer.sendSystemMessage(useResult.message().withColor(0xfe7878));
             }
         }
         return InteractionResultHolder.fail(stack);
@@ -58,7 +56,7 @@ public class SkillGrantItem extends Item {
         DataComponentUtil.getSkillGrantData(stack).ifPresent(skillGrantData -> {
             if(skillGrantData.skills().size() == 1 && player instanceof ServerPlayer serverPlayer) {
                 applyEffects(skillGrantData.skills().getFirst(), skillGrantData.getApplicationType(), skillGrantData.applicationValue(), skillGrantData.experienceCost(), serverPlayer, stack);
-            } else if (skillGrantData.skills().size() > 1 && player instanceof LocalPlayer) {
+            } else if (skillGrantData.skills().size() > 1 && !(player instanceof ServerPlayer)) {
                 ClientUtil.openSkillGrantScreen(skillGrantData);
             }
         });
@@ -66,31 +64,16 @@ public class SkillGrantItem extends Item {
 
     public void applyEffects(String skill, ApplicationType applicationType, Long applicationValue, int experienceCost, ServerPlayer serverPlayer, ItemStack stack) {
         if(!serverPlayer.getAbilities().instabuild && experienceCost > serverPlayer.experienceLevel) {
-            serverPlayer.sendSystemMessage(Component.translatable("pmmo_skill_books.message.not_enough_experience").withColor(0xfe7878));
+            serverPlayer.sendSystemMessage(Component.translatable("pmmo_skill_books.message.not_enough_experience", experienceCost).withColor(0xfe7878));
             return;
         }
-
-        long currentLevel = APIUtils.getLevel(skill, serverPlayer);
-        long maxLevel = Config.server().levels().maxLevel();
 
         if(!NeoForge.EVENT_BUS.post(new SkillGrantEvent.Pre(serverPlayer, skill, applicationType.name(), applicationValue)).isCanceled()) {
             try {
                 switch(applicationType) {
-                    case ApplicationType.LEVEL -> {
-                        if(currentLevel != maxLevel && currentLevel + applicationValue >= maxLevel) {
-                            APIUtils.setLevel(skill, serverPlayer, Math.toIntExact(maxLevel));
-                        } else {
-                            APIUtils.addLevel(skill, serverPlayer, Math.toIntExact(applicationValue));
-                        }
-                    }
+                    case ApplicationType.LEVEL -> APIUtils.addLevel(skill, serverPlayer, Math.toIntExact(applicationValue));
                     case ApplicationType.XP -> APIUtils.addXp(skill, serverPlayer, applicationValue);
-                    case ApplicationType.SET -> {
-                        if(applicationValue > maxLevel) {
-                            APIUtils.setLevel(skill, serverPlayer, Math.toIntExact(maxLevel));
-                        } else {
-                            APIUtils.setLevel(skill, serverPlayer, Math.toIntExact(applicationValue));
-                        }
-                    }
+                    case ApplicationType.SET -> APIUtils.setLevel(skill, serverPlayer, Math.toIntExact(applicationValue));
                 }
 
                 PlayerMessenger.displayTranslatabelClientMessage(serverPlayer,

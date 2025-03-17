@@ -1,5 +1,6 @@
 package net.silvertide.pmmo_skill_books.utils;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.item.ItemStack;
@@ -12,29 +13,29 @@ public final class SkillGrantUtil {
     public static UseSkillGrantResult canPlayerUseSkillBook(ServerPlayer player, ItemStack stack) {
         return DataComponentUtil.getSkillGrantData(stack).map(skillGrantData -> {
             if(skillGrantData.skills().isEmpty()) {
-                return new UseSkillGrantResult(false, "pmmo_skill_books.message.no_skill_specified");
+                return new UseSkillGrantResult(false, Component.translatable("pmmo_skill_books.message.no_skill_specified"));
             }
 
             if(skillGrantData.applicationValue() <= 0) {
-                return new UseSkillGrantResult(false, "pmmo_skill_books.message.value_zero_or_less");
+                return new UseSkillGrantResult(false, Component.translatable("pmmo_skill_books.message.value_zero_or_less"));
             }
 
             if(StringUtil.isBlank(skillGrantData.applicationType())) {
-                return new UseSkillGrantResult(false, "pmmo_skill_books.message.no_application_type");
+                return new UseSkillGrantResult(false, Component.translatable("pmmo_skill_books.message.no_application_type"));
             }
 
             try {
                 ApplicationType.valueOf(skillGrantData.applicationType().toUpperCase());
             } catch(IllegalArgumentException ex) {
-                return new UseSkillGrantResult(false, "pmmo_skill_books.message.wrong_application_type");
+                return new UseSkillGrantResult(false, Component.translatable("pmmo_skill_books.message.wrong_application_type"));
             }
 
             if(!player.getAbilities().instabuild && skillGrantData.experienceCost() > 0 && player.experienceLevel < skillGrantData.experienceCost()) {
-                return new UseSkillGrantResult(false, "pmmo_skill_books.message.not_enough_experience");
+                return new UseSkillGrantResult(false, Component.translatable("pmmo_skill_books.message.not_enough_experience", skillGrantData.experienceCost()));
             }
 
-            return new UseSkillGrantResult(true, "");
-        }).orElse(new UseSkillGrantResult(false, "pmmo_skill_books.message.no_data_found"));
+            return new UseSkillGrantResult(true, Component.empty());
+        }).orElse(new UseSkillGrantResult(false, Component.translatable("pmmo_skill_books.message.no_data_found")));
 
     }
 
