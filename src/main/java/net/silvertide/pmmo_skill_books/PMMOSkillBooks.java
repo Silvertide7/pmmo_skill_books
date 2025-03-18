@@ -1,6 +1,7 @@
 package net.silvertide.pmmo_skill_books;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -29,7 +30,7 @@ public class PMMOSkillBooks
     public static class ClientEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent clientSetupEvent) {
-            ItemPropertyRegistry.addCustomItemProperties();
+            clientSetupEvent.enqueueWork(() -> ItemProperties.register(ItemRegistry.SKILL_GRANT.get(), ItemPropertyRegistry.SKILL_GRANT_PROPERTY, (stack, level, entity, seed) -> ItemPropertyRegistry.getSkillGrantConfiguration(stack)));
         }
     }
 
